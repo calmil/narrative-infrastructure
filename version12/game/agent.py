@@ -15,6 +15,8 @@ _WIGGLE_AMOUNT = 2
 _SPEED_LIMIT = 30
 _SPEED_MULTIPLIER = 1
 
+_LINE_DISTANCE = 50
+
 # Will soon have to break up the agent class to only handle movement behavior rather than the entire
 # business of trading data. This is getting tricky lol.
 
@@ -42,6 +44,8 @@ class Agent(pyglet.sprite.Sprite):
 
         # List of vertices for drawing line. Needs updating!
         self.vlist = pyglet.graphics.vertex_list(2,('v2f', [self.x, self.y,
+                                                            self.x + self.v.x, self.y + self.v.y]))
+        self.neighbor_vlist = pyglet.graphics.vertex_list(2,('v2f', [self.x, self.y,
                                                             self.x + self.v.x, self.y + self.v.y]))
 
         # Initialize all timers to 0
@@ -130,6 +134,17 @@ class Agent(pyglet.sprite.Sprite):
         return wiggle_vector
 
 ####
+
+    def neighbor_lines(self, other_agent):
+        actual_distance = util.distance(self.position, other_agent.position)
+
+        if actual_distance <= _LINE_DISTANCE:
+            self.neighbor_vlist = pyglet.graphics.vertex_list(2, ('v2f', [
+                self.x,
+                self.y,
+                other_agent.x,
+                other_agent.y]))
+
     def interacts_with(self, other_agent):
         actual_distance = util.distance(self.position, other_agent.position)
 

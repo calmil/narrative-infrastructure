@@ -53,6 +53,13 @@ def on_draw():
     data_window.clear()
     fps_display.draw()
 
+    for i in range(len(agents)):
+        for j in range(i + 1, len(agents)):
+            obj_1 = agents[i]
+            obj_2 = agents[j]
+            obj_1.neighbor_lines(obj_2)
+            obj_1.neighbor_vlist(GL_LINES)
+
     for i in agents:
         i.vlist.draw(GL_LINES)
         i.data_tag.draw()
