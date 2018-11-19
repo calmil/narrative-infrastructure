@@ -7,12 +7,10 @@ data_window = pyglet.window.Window(common.window_width, common.window_height)
 text_window = pyglet.window.Window(common.window_width, common.window_height)
 
 main_batch = pyglet.graphics.Batch()
-
 fps_display = pyglet.clock.ClockDisplay()
 
 result_tag = pyglet.text.Label()
 index_tag = pyglet.text.Label()
-
 
 def init_agents(num_agents, batch = None):
     """Initialize and load agents into a returned array"""
@@ -32,8 +30,9 @@ def init_agents(num_agents, batch = None):
 
 agents = init_agents(common.agent_count, main_batch)
 
-
-
+#
+#
+#
 
 @game_window.event
 def on_draw():
@@ -87,8 +86,9 @@ def on_draw():
 
     index_tag.draw()
 
-
-
+#
+#
+#
 
 def update(dt):
     # Go through each agent's update loop
@@ -103,8 +103,9 @@ def update(dt):
             obj_1.interacts_with(obj_2)
             obj_2.interacts_with(obj_1)
 
-
-
+#
+#
+#
 
 def roll(dt):
     """Make a random choice, and give agents respective feedback based on their response"""
@@ -122,10 +123,10 @@ def refresh_data(dt):
         data.agent_index[agent.id] = ("".join(agent.name))
 
 def draw_graph(dt):
-    
 
-
-
+#
+#
+#
 
 if __name__ == '__main__':
     pyglet.clock.schedule_interval(update, 1 / 60.0)
