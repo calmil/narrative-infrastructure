@@ -15,10 +15,7 @@ _WIGGLE_AMOUNT = 2
 _SPEED_LIMIT = 30
 _SPEED_MULTIPLIER = 1
 
-_LINE_DISTANCE = 100
-
-# Will soon have to break up the agent class to only handle movement behavior rather than the entire
-# business of trading data. This is getting tricky lol.
+_INTERACTION_DISTANCE = 50
 
 # Get rid of superclass
 class Agent(pyglet.sprite.Sprite):
@@ -48,10 +45,12 @@ class Agent(pyglet.sprite.Sprite):
         self.neighbor_vlist = pyglet.graphics.vertex_list(2,('v2f', [self.x, self.y,
                                                             self.x + self.v.x, self.y + self.v.y]))
 
+        self.confidence = 0
+        self.bias = round(random.random())
+
         # Initialize all timers to 0
         for j in range(self.total_agent_count):
             self.interaction_timers[j] = 0
-
 
     def update(self, dt):
         # Check edges
@@ -89,7 +88,7 @@ class Agent(pyglet.sprite.Sprite):
         for i in range(self.total_agent_count):
             self.interaction_timers[i] += 1
 
-####
+#### Movement
     def check_bounds(self):
         """Checks the object's edges against the edges of the window."""
         min_x = -self.image.width / 2
@@ -133,12 +132,11 @@ class Agent(pyglet.sprite.Sprite):
                                         random.randint(_WIGGLE_AMOUNT / 2* -1, _WIGGLE_AMOUNT / 2))
         return wiggle_vector
 
-####
-
+#### Detection / Interaction
     def neighbor_lines(self, other_agent):
         actual_distance = util.distance(self.position, other_agent.position)
 
-        if actual_distance <= _LINE_DISTANCE:
+        if actual_distance <= _INTERACTION_DISTANCE:
             self.neighbor_vlist = pyglet.graphics.vertex_list(2, ('v2f', [
                 self.x,
                 self.y,
@@ -170,6 +168,10 @@ class Agent(pyglet.sprite.Sprite):
         self.random_index = random.randint(0,8)
         self.name[self.random_index] = other_agent.name[self.random_index]
 
-    # def update_log(self, other_agent):
-    #     data.trade_history.insert(0, str(self.name) + " and " + str(other_agent.name))
-    #     data.trade_history.pop()
+#### Trading
+    def guess(self):
+        if confidence < 100:
+            guess_val = round(random.random())
+        elif confidence == 100:
+            guess_val = self.bias
+        return guess_val
