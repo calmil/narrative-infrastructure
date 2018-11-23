@@ -7,12 +7,12 @@ _COHESION_RADIUS = 50
 _SEPARATION_RADIUS = 35
 
 _ALIGNMENT_WEIGHT = 1
-_COHESION_WEIGHT = 0.8
+_COHESION_WEIGHT = 1
 _SEPARATION_WEIGHT = 0.3
 
 _WIGGLE_AMOUNT = 2
 
-_SPEED_LIMIT = 30
+_SPEED_LIMIT = 40
 _SPEED_MULTIPLIER = 1
 
 _INTERACTION_RADIUS = 50
@@ -56,12 +56,6 @@ class Agent(pyglet.sprite.Sprite):
         # Check edges
         self.check_bounds()
 
-        # Cap agent movement speed.
-        if self.v.x > _SPEED_LIMIT:
-            self.v.x = _SPEED_LIMIT
-        if self.v.y > _SPEED_LIMIT:
-            self.v.y = _SPEED_LIMIT
-
         # Movement calculations.
         self.x += self.v.x * dt
         self.y += self.v.y * dt
@@ -70,6 +64,12 @@ class Agent(pyglet.sprite.Sprite):
         self.random_offset = vector2.Vector2(random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2),
                                              random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2))
         self.v += self.random_offset
+
+       # Cap agent movement speed.
+        if self.v.x > _SPEED_LIMIT:
+            self.v.x = 20
+        if self.v.y > _SPEED_LIMIT:
+            self.v.y = 20
 
         # Draw momentum vector
         self.vlist = pyglet.graphics.vertex_list(2, ('v2f', [   self.x,

@@ -25,3 +25,9 @@ Added a graph test, just made a little class that you then update. We'll see how
 ## 15
 
 Going to formalize the Graph class, clean it up a bit, and start really laying out what each window will do. Also, going to fold data and common into one another because I'm not certain I really get why they're different.
+
+Huge problem...lol...for some reason the names all become the same after long enough? Name swap module should be changed. But also, should probably not exist in its current state anyway.
+
+## 16
+
+Starting with deleting the name module for now. Commenting, rather. Need to slow down the graph also.

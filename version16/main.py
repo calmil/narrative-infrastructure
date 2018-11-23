@@ -13,7 +13,7 @@ fps_display = pyglet.clock.ClockDisplay()
 result_tag = pyglet.text.Label()
 index_tag = pyglet.text.Label()
 
-result_sum = 300
+result_sum = 300 # Half of the height, atm.
 result_graph = graph.Graph(200, 0, 20, common.window_width)
 
 def init_agents(num_agents, batch = None):
@@ -22,10 +22,10 @@ def init_agents(num_agents, batch = None):
     for i in range(num_agents):
         random.seed(i)
         new_agent = agent.Agent(
-            img = resources.white_agent_image,
-            x = random.randint(0, common.window_width), # Random starting x
-            y = random.randint(0, common.window_height), # Random starting y
-            total_agent_count = num_agents,      # Total count (for internal calc.)
+            img=resources.white_agent_image,
+            x=random.randint(0, common.window_width),   # Random starting x
+            y=random.randint(0, common.window_height),  # Random starting y
+            total_agent_count=num_agents,               # Total count (for internal calc.)
             batch=batch)
         new_agent.id = i
         agents.append(new_agent)
@@ -49,21 +49,20 @@ def on_draw():
             obj_1 = agents[i]
             obj_2 = agents[j]
             obj_1.neighbor_lines(obj_2)
-            #obj_1.neighbor_vlist.draw(GL_LINES)
 
     for agent in agents:
         glColor3f(255,0,0)
-        agent.vlist.draw(GL_LINES)  # Draw velocity vector
-        index_tag = pyglet.text.Label(
-            text=(
-                "Bias: " + str(agent.bias) + '\n' +
-                "Guess: " + str(agent.final_guess)),
-            font_name = 'Arial',
-            font_size = 6,
-            x = agent.x, y=agent.y,
-            multiline=True, width = 100,
-            align = 'left')
-        index_tag.draw()
+        #agent.vlist.draw(GL_LINES)  # Draw velocity vector
+        # index_tag = pyglet.text.Label(
+        #     text=(
+        #         "Bias: " + str(agent.bias) + '\n' +
+        #         "Guess: " + str(agent.final_guess)),
+        #     font_name = 'Arial',
+        #     font_size = 6,
+        #     x = agent.x, y=agent.y,
+        #     multiline=True, width = 100,
+        #     align = 'left')
+        #index_tag.draw()
 
 @data_window.event
 def on_draw():
@@ -127,9 +126,9 @@ def update(dt):
 #
 #
 
-def refresh_data(dt):
-    for agent in agents:
-        common.agent_index[agent.id] = ("".join(agent.name))
+# def refresh_data(dt):
+#     for agent in agents:
+#         common.agent_index[agent.id] = ("".join(agent.name))
 
 #
 #
@@ -137,6 +136,6 @@ def refresh_data(dt):
 
 if __name__ == '__main__':
     pyglet.clock.schedule_interval(update, 1 / 60.0)
-    pyglet.clock.schedule_interval(refresh_data, 1)
+    # pyglet.clock.schedule_interval(refresh_data, 1)
     pyglet.clock.schedule_interval(roll, 2)
     pyglet.app.run()
