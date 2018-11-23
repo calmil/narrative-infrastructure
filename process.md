@@ -19,3 +19,9 @@ I actually ended up doing something different. I just have it choose -1 or 1 and
 Also going to start breaking features up into little testing modules, such as for no. 13 I made a data test module that just tests the new trading features.
 
 ## 14
+
+Added a graph test, just made a little class that you then update. We'll see how this works out. I'm going to turn it into a module and turn the "data window" into the stock chart for v15.
+
+## 15
+
+Going to formalize the Graph class, clean it up a bit, and start really laying out what each window will do. Also, going to fold data and common into one another because I'm not certain I really get why they're different.

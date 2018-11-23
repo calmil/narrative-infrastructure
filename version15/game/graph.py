@@ -2,8 +2,6 @@ import pyglet, random
 from pyglet.gl import *
 from collections import deque
 
-window = pyglet.window.Window(400,200)
-
 class Graph(object):
 
     def __init__(self, r, g, b, width):
@@ -13,31 +11,25 @@ class Graph(object):
         self.width = width
 
         self.data_array = deque([])
-        for i in range(self.width):
+        for i in range(self.width + 1):
             self.data_array.append(0)
 
     def update(self, dt, update_value):
         self.data_array.append(update_value)
         self.data_array.popleft()
 
-    def draw_graph(self):
+    def draw(self):
         glColor3f(self.r, self.g, self.b)
 
-        for i in range(1,self.width):
+        for i in range(self.width):
             pyglet.graphics.draw(2, pyglet.gl.GL_LINES,
                 ('v2i', (i - 1, self.data_array[i - 1], i, self.data_array[i])))
 
-new_graph = Graph(200, 1, 200, 400)
+# How you initialize a graph:
+#   new_graph = Graph(200, 1, 200, 400)
 
-@window.event
-def on_draw():
-    window.clear()
+# How you draw a graph:
+#   new_graph.draw()
 
-    new_graph.draw_graph()
-
-def update(dt):
-    new_graph.update(dt, random.randint(0,20))
-
-if __name__ == '__main__':
-    pyglet.clock.schedule_interval(update, 1/30)
-    pyglet.app.run()
+# How you update a graph:
+#   new_graph.update(dt, random.randint(0,20))
