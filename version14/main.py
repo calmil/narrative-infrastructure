@@ -12,6 +12,11 @@ fps_display = pyglet.clock.ClockDisplay()
 result_tag = pyglet.text.Label()
 index_tag = pyglet.text.Label()
 
+result_index = []
+
+for i in range(common.window_width + 1):
+    result_index.append(random.randint(0,20))
+
 def init_agents(num_agents, batch = None):
     """Initialize and load agents into a returned array"""
     agents = []
@@ -43,7 +48,7 @@ def on_draw():
     glColor3f(255, 0, 0)
 
     for i in agents:
-        i.vlist.draw(GL_LINES)
+        i.vlist.draw(GL_LINES)  # Draw velocity vector
 
 @data_window.event
 def on_draw():
@@ -53,6 +58,8 @@ def on_draw():
         for j in range(i + 1, len(agents)):
             obj_1 = agents[i]
             obj_2 = agents[j]
+            obj_1.neighbor_lines(obj_2)
+            obj_1.neighbor_vlist.draw(GL_LINES)
 
     for agent in agents:
         index_tag = pyglet.text.Label(
@@ -83,7 +90,6 @@ def on_draw():
         multiline = True,
         align = 'center',
         anchor_x = 'center')
-
     index_tag.draw()
 
 #
@@ -122,14 +128,12 @@ def refresh_data(dt):
     for agent in agents:
         data.agent_index[agent.id] = ("".join(agent.name))
 
-def draw_graph(dt):
-
 #
 #
 #
 
 if __name__ == '__main__':
     pyglet.clock.schedule_interval(update, 1 / 60.0)
-    pyglet.clock.schedule_interval(roll, 2)
     pyglet.clock.schedule_interval(refresh_data, 1)
+    pyglet.clock.schedule_interval(roll, 2)
     pyglet.app.run()
