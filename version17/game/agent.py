@@ -1,5 +1,5 @@
 import pyglet, random, math
-from . import util, vector2, name, common
+from . import util, vector2, common
 from pyglet.gl import *
 
 _ALGINMENT_RADIUS = 60
@@ -20,17 +20,16 @@ _INTERACTION_RADIUS = 50
 # Get rid of superclass
 class Agent(pyglet.sprite.Sprite):
 
-    def __init__(self, total_agent_count, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.name = name.gen(4)
 
         self.trade_tag = pyglet.text.Label()
         self.data_tag = pyglet.text.Label()
 
-        self.total_agent_count = total_agent_count
+        self.total_agent_count = common.agent_count
         self.total_trades = 0
         self.interaction_timers = {}
+        self.announce_timer = 0
 
         # Give a random heading, normalise, and scale by 10.
         self.velocity_x = random.randint(-100, 100)
@@ -149,10 +148,8 @@ class Agent(pyglet.sprite.Sprite):
 
         if actual_distance <= _ALGINMENT_RADIUS:
             self.v += self.compute_alignment(other_agent) * _ALIGNMENT_WEIGHT
-
         if actual_distance <= _COHESION_RADIUS:
             self.v += self.compute_cohesion(other_agent) * _COHESION_WEIGHT
-
         if actual_distance <= _SEPARATION_RADIUS:
             self.v += self.compute_separation(other_agent) * _SEPARATION_WEIGHT
 
@@ -166,17 +163,11 @@ class Agent(pyglet.sprite.Sprite):
                         self.bias += 1
 
     def trade(self, other_agent):
-        # self.update_log(other_agent)
-        self.total_trades += 1
-
         # Reset trade timer
         self.interaction_timers[other_agent.id] = 0
 
-        # Trade chars of a random index.
-        # self.random_index = random.randint(0,8)
-        # self.name[self.random_index] = other_agent.name[self.random_index]
 
-#### Trading
+#### Guessing
     def guess(self):
         self.final_guess = round(self.bias/100)
 
@@ -194,3 +185,14 @@ class Agent(pyglet.sprite.Sprite):
             self.bias -= 1
         else:
             self.bias += 1
+
+    def announce(self, text):
+        self.announce_timer = 0
+
+        pyglet.text.Label(
+            text=(text),
+            font_name = 'Arial',
+            font_size = 6,
+            x = self.x, y=self.y,
+            multiline=True, width = 40,
+            align='left').draw()

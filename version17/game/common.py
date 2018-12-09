@@ -1,5 +1,5 @@
-window_width = 300
-window_height = 600
+window_width = 600
+window_height = 700
 
 result = None
 
