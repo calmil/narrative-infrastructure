@@ -8,8 +8,8 @@ Future:
 
 v19:
 
-- [ ] Resolve latency of Stele
-- [ ] Get Stele to blink on contact
+- [x] Resolve latency of Stele
+- [x] Get Stele to blink on contact
 - [ ] Get graph to work properly
 
 v18:
