@@ -1,8 +1,8 @@
-import pyglet, math, random, time
-pyglet.options['debug_gl'] = False
 from game import resources, vector2, util
 from collections import deque
 from pyglet.gl import *
+import pyglet, random
+pyglet.options['debug_gl'] = False
 
 window_width, window_height = 900, 700
 
@@ -13,24 +13,16 @@ last_interaction = None
 agent_count = 7
 agent_index = []
 
-implicit_window = pyglet.window.Window(window_width, window_height)
-explicit_window = pyglet.window.Window(window_width, window_height)
-stele_window = pyglet.window.Window(window_width, window_height)
-
 main_batch = pyglet.graphics.Batch()
 
-result_sum = 300 # Half of the height, atm. Used for graph.
+result_sum = 300
 result_tag = pyglet.text.Label()
 
 fps_display = pyglet.clock.ClockDisplay()
 
-_ALGINMENT_RADIUS = 60
-_COHESION_RADIUS = 50
-_SEPARATION_RADIUS = 35
-
-_ALIGNMENT_WEIGHT = 0.5
-_COHESION_WEIGHT = 0.5
-_SEPARATION_WEIGHT = 0.25
+_ALGINMENT_RADIUS, _ALIGNMENT_WEIGHT = 60, 0.5
+_COHESION_RADIUS, _COHESION_WEIGHT = 50, 0.5
+_SEPARATION_RADIUS, _SEPARATION_WEIGHT = 35, 0.25
 
 _WIGGLE_AMOUNT = 2
 
@@ -38,6 +30,7 @@ _SPEED_LIMIT = 40
 _SPEED_MULTIPLIER = 1
 
 _INTERACTION_RADIUS = 50
+
 
 class Stele(object):
 
@@ -56,43 +49,45 @@ class Stele(object):
             if x != 0:
                 # X label
                 pyglet.text.Label(text=str(x),
-                                            x = (x * self.q_width) + self.q_width/2,
-                                            y = window_height - self.q_height/2,
-                                            anchor_x='center',
-                                            batch=stele_labels)
+                                  x=(x*self.q_width)+(self.q_width/2),
+                                  y=window_height-(self.q_height/2),
+                                  anchor_x='center',
+                                  batch=stele_labels)
                 # Y label
                 pyglet.text.Label(text=str(x),
-                                            x = self.q_width/2,
-                                            y = window_height - ((x * self.q_height) + self.q_height/2),
-                                            anchor_x='center',
-                                            batch=stele_labels)
+                                  x=self.q_width/2,
+                                  y=window_height-((x*self.q_height)+self.q_height/2),
+                                  anchor_x='center',
+                                  batch=stele_labels)
 
             for y in range(0, agent_count+1):
-                pyglet.graphics.draw(4, pyglet.gl.GL_LINE_LOOP,
-                    ('v2f',
-                           [x * self.q_width, y * self.q_height,
-                            x * self.q_width, y * self.q_height + self.q_height,
-                            x * self.q_width + self.q_width, y * self.q_height + self.q_height,
-                            x * self.q_width + self.q_width, y * self.q_height
-                    ]))
+                pyglet.graphics.draw(4,
+                                     pyglet.gl.GL_LINE_LOOP,
+                                     ('v2f',
+                                      [x * self.q_width, y * self.q_height,
+                                       x * self.q_width, y * self.q_height + self.q_height,
+                                       x * self.q_width + self.q_width, y * self.q_height + self.q_height,
+                                       x * self.q_width + self.q_width, y * self.q_height]))
 
                 if x != 0 and y != 0:
                     # index_tag.join(str(x) + " to " + str(y))
                     pyglet.text.Label(text=("index_tag"),
-                                                    x = (x * self.q_width) + self.q_width/2,
-                                                    y = window_height - ((y * self.q_height) + self.q_height/2),
-                                                    anchor_x='center',
-                                                    batch=stele_labels)
+                                      x=(x * self.q_width) + self.q_width/2,
+                                      y=window_height-((y*self.q_height)+self.q_height/2),
+                                      anchor_x='center',
+                                      batch=stele_labels)
 
                 if last_interaction == (x, y):
                     glColor3f(200,100,0)
-                    pyglet.graphics.draw(4, pyglet.gl.GL_QUADS, ('v2f',
-                                                            [x * self.q_width, y * self.q_height,
-                                                             x * self.q_width, y * self.q_height + self.q_height,
-                                                             x * self.q_width + self.q_width, y * self.q_height + self.q_height,
-                                                             x * self.q_width + self.q_width, y*self.q_height]
+                    pyglet.graphics.draw(4, pyglet.gl.GL_QUADS,
+                                        ('v2f',
+                                        [x * self.q_width, y * self.q_height,
+                                         x * self.q_width, y * self.q_height + self.q_height,
+                                         x * self.q_width + self.q_width, y * self.q_height + self.q_height,
+                                         x * self.q_width + self.q_width, y * self.q_height]
                                         ))
         stele_labels.draw()
+
 
 class Agent(pyglet.sprite.Sprite):
 
@@ -276,6 +271,7 @@ class Agent(pyglet.sprite.Sprite):
             multiline=True, width = 40,
             align='left').draw()
 
+
 class Graph(object):
 
     def __init__(self, r, g, b, width):
@@ -299,85 +295,103 @@ class Graph(object):
             pyglet.graphics.draw(2, pyglet.gl.GL_LINES,
                 ('v2i', (i - 1, self.data_array[i - 1], i, self.data_array[i])))
 
-def init_agents(batch = None):
-    """Initialize and load agents into a returned array"""
-    agents = []
-    for i in range(agent_count):
-        random.seed(i)
-        new_agent = Agent(
-            img=resources.white_agent_image,
-            x=random.randint(0, window_width),
-            y=random.randint(0, window_height),
-            batch=main_batch)
-        new_agent.id = i
-        agents.append(new_agent)
-        agent_index.append("")
-    return agents
 
-agents = init_agents(main_batch)
+class Application():
+    """Main application run class. """
 
+    def setup(self):
+        """Initialize agents"""
+        for i in range(agent_count):
+            random.seed(i)
+            new_agent = Agent(
+                img=resources.white_agent_image,
+                x=random.randint(0, window_width),
+                y=random.randint(0, window_height),
+                batch=main_batch)
+            new_agent.id = i
+            agents.append(new_agent)
+            agent_index.append("")
+
+    def roll(self, dt):
+        """Make a random choice, and give agents respective feedback based on their response"""
+        result = random.choice([-1,1])
+
+        global result_sum
+        result_sum += (result*2)
+        result_tag.text = str(result)
+
+        for agent in agents:
+            if agent.guess() == result:
+                agent.feedback(True)
+            else:
+                agent.feedback(False)
+
+        graph.update(result_sum)
+
+    def update(self, dt):
+        # Go through each agent's update loop
+        for agent in agents:
+            agent.update(dt)
+
+        # Iterate through all object pairs to check for detection
+        for i in range(len(agents)):
+            for j in range(i + 1, len(agents)):
+                obj_1 = agents[i]
+                obj_2 = agents[j]
+                obj_1.interacts_with(obj_2)
+                obj_2.interacts_with(obj_1)
+
+    def on_draw(self):
+        pass
+
+
+agents = []
 stele = Stele()
-
-result_graph = Graph(200, 0, 20, window_width)
-
-@implicit_window.event
-def on_draw():
-    implicit_window.clear()
-    main_batch.draw()
-    fps_display.draw()
-
-    for i in range(len(agents)):
-        for j in range(i + 1, len(agents)):
-            obj_1 = agents[i]
-            obj_2 = agents[j]
-            obj_1.neighbor_lines(obj_2)
-
-    for agent in agents:
-        glColor3f(255,0,0)
-        agent.vlist.draw(GL_LINES)  # Draw velocity vector
-
-@explicit_window.event
-def on_draw():
-    explicit_window.clear()
-    result_graph.draw()
-    result_tag.draw()
-
-@stele_window.event
-def on_draw():
-    stele_window.clear()
-    stele.draw()
+graph = Graph(200, 0, 20, window_width)
 
 
-def roll(dt):
-    """Make a random choice, and give agents respective feedback based on their response"""
-    result = random.choice([-1,1])
+def main():
+    """Main loop, where the windows and application are set up and the timed methods called. """
 
-    global result_sum
-    result_sum += (result*2)
-    result_tag.text = str(result)
+    app = Application()
 
-    for agent in agents:
-        if agent.guess() == result:
-            agent.feedback(True)
-        else:
-            agent.feedback(False)
+    app.setup()
 
-    result_graph.update(result_sum)
+    implicit_window = pyglet.window.Window(window_width, window_height)
+    explicit_window = pyglet.window.Window(window_width, window_height)
+    stele_window = pyglet.window.Window(window_width, window_height)
 
-def update(dt):
-    # Go through each agent's update loop
-    for agent in agents:
-        agent.update(dt)
+    @implicit_window.event
+    def on_draw():
+        implicit_window.clear()
+        main_batch.draw()
+        fps_display.draw()
 
-    # Iterate through all object pairs to check for detection
-    for i in range(len(agents)):
-        for j in range(i + 1, len(agents)):
-            obj_1 = agents[i]
-            obj_2 = agents[j]
-            obj_1.interacts_with(obj_2)
-            obj_2.interacts_with(obj_1)
+        for i in range(len(agents)):
+            for j in range(i + 1, len(agents)):
+                obj_1 = agents[i]
+                obj_2 = agents[j]
+                obj_1.neighbor_lines(obj_2)
 
-if __name__ == '__main__':
-    pyglet.clock.schedule_interval(update, 1 / 60.0)
-    pyglet.clock.schedule_interval(roll, 1)
+        for agent in agents:
+            glColor3f(255,0,0)
+            agent.vlist.draw(GL_LINES)  # Draw velocity vector
+
+    @explicit_window.event
+    def on_draw():
+        explicit_window.clear()
+        graph.draw()
+        result_tag.draw()
+
+    @stele_window.event
+    def on_draw():
+        stele_window.clear()
+        stele.draw()
+
+    pyglet.clock.schedule_interval(app.update, 1 / 60.0)
+    pyglet.clock.schedule_interval(app.roll, 1)
+
     pyglet.app.run()
+
+
+main()

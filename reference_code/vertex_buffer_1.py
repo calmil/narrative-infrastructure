@@ -96,7 +96,6 @@ class MyApplication():
             red = random.randrange(256)
             green = random.randrange(256)
             blue = random.randrange(256)
-            alpha = random.randrange(256)
             shape = Rectangle(x, y, width, height, d_x, d_y, (red, green, blue))
             self.shape_list.append(shape)
 
@@ -121,12 +120,10 @@ class MyApplication():
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, self.vertex_vbo_id)
         GL.glVertexPointer(2, GL.GL_FLOAT, 0, 0)
 
-
         offset = 0
         for shape in self.shape_list:
             render_rect_filled(shape, offset)
             offset += 4
-
 
 
 def main():
