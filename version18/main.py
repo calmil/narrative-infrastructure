@@ -3,6 +3,7 @@ from collections import deque
 from pyglet.gl import *
 import pyglet
 import random
+
 pyglet.options['debug_gl'] = False
 
 window_width, window_height = 900, 700
@@ -11,10 +12,11 @@ result = None
 
 last_interaction = None
 
-agent_count = 7
+agent_count = 10
 agent_index = []
 
 agent_batch = pyglet.graphics.Batch()
+stele_batch = pyglet.graphics.Batch()
 
 result_sum = 300
 result_tag = pyglet.text.Label()
@@ -34,19 +36,14 @@ _INTERACTION_RADIUS = 50
 
 
 class Stele(object):
+    """Main Stele visualization, charting interactions between implicit actors. """
 
     def __init__(self):
         self.q_width = window_width / (agent_count + 1)
         self.q_height = window_height / (agent_count + 1)
         self.last_interaction = None
 
-    def update(self):
-        pass
-
-    def draw(self):
-        stele_batch = pyglet.graphics.Batch()
         for x in range(0, agent_count + 1):
-
             if x != 0:
                 # X label
                 pyglet.text.Label(text=str(x),
@@ -60,10 +57,8 @@ class Stele(object):
                                   y=window_height-((x*self.q_height)+self.q_height/2),
                                   anchor_x='center',
                                   batch=stele_batch)
-
-            for y in range(0, agent_count+1):
-                stele_batch.add(5,
-                                pyglet.gl.GL_LINE_LOOP, None,
+            for y in range(0, agent_count + 1):
+                stele_batch.add(5, pyglet.gl.GL_LINE_LOOP, None,
                                 ('v2f',
                                     [x * self.q_width, y * self.q_height,
                                      x * self.q_width, y * self.q_height + self.q_height,
@@ -71,32 +66,34 @@ class Stele(object):
                                      x * self.q_width + self.q_width, y * self.q_height,
                                      x * self.q_width, y * self.q_height]))
 
-                if x != 0 and y != 0:
-                    # index_tag.join(str(x) + " to " + str(y))
-                    pyglet.text.Label(text=("index_tag"),
-                                      x=(x * self.q_width) + self.q_width/2,
-                                      y=window_height-((y*self.q_height)+self.q_height/2),
-                                      anchor_x='center',
-                                      batch=stele_batch)
+    def update(self):
+        pass
 
-                # if last_interaction == (x, y):
-                #     glColor3f(200,100,0)
-                #     stele_batch.add(4, pyglet.gl.GL_QUADS, None,
-                #                         ('v2f',
-                #                         [x * self.q_width, y * self.q_height,
-                #                          x * self.q_width, y * self.q_height + self.q_height,
-                #                          x * self.q_width + self.q_width, y * self.q_height + self.q_height,
-                #                          x * self.q_width + self.q_width, y * self.q_height]
-                #                         ))
+    def draw(self):
+        glColor3f(200,200,200)
         stele_batch.draw()
+
+    def blink(self, x, y):
+        # glColor3f(200,100,0)
+        c1 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        c2 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        c3 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        c4 = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+
+        stele_batch.add(4, pyglet.gl.GL_QUADS, None,
+                            ('v2f',
+                                ((x * self.q_width) + self.q_width, y * self.q_height,
+                                 (x * self.q_width) + self.q_width, y * self.q_height + self.q_height,
+                                 (x * self.q_width) + self.q_width + self.q_width, y * self.q_height + self.q_height,
+                                 (x * self.q_width) + self.q_width + self.q_width, y * self.q_height)),
+                            ('c3B', (c1[0], c1[1], c1[2], c2[0], c2[1], c2[2], c3[0], c3[1], c3[2], c4[0], c4[1], c4[2])))
 
 
 class Agent(pyglet.sprite.Sprite):
+    """Main Agent class, which is capable of executing set behaviors"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-
 
         self.trade_tag = pyglet.text.Label()
         self.data_tag = pyglet.text.Label()
@@ -181,17 +178,15 @@ class Agent(pyglet.sprite.Sprite):
 
     def compute_alignment(self, other_agent):
         # Alignment vector will be the sum of the two
-        alignment_vector = vector2.Vector2( self.velocity_x + other_agent.velocity_x,
-                                            self.velocity_y + other_agent.velocity_y)
+        alignment_vector = vector2.Vector2(self.velocity_x + other_agent.velocity_x,
+                                           self.velocity_y + other_agent.velocity_y)
         alignment_vector.normalise()
         return alignment_vector
 
     def compute_cohesion(self, other_agent):
         cohesion_vector = vector2.Vector2(self.x + other_agent.x, self.y + other_agent.y)
-
         cohesion_vector.x /= 2
         cohesion_vector.y /= 2
-
         cohesion_vector.normalize()
         return cohesion_vector
 
@@ -238,10 +233,10 @@ class Agent(pyglet.sprite.Sprite):
                         self.bias += 1
 
     def trade(self, other_agent):
+        stele.blink(self.id, other_agent.id)
         # Reset trade timer
         self.interaction_timers[other_agent.id] = 0
         last_interaction = (self.id, other_agent.id)
-        print(last_interaction)
 
     #### Guessing
     def guess(self):
@@ -275,6 +270,7 @@ class Agent(pyglet.sprite.Sprite):
 
 
 class Graph(object):
+    """Generates a graph of a set width, which can be updated. """
 
     def __init__(self, width):
         self.width = width
@@ -290,28 +286,16 @@ class Graph(object):
         self.data_array.popleft()
 
     def draw(self, r, g, b, ):
-        self.r = r
-        self.g = g
-        self.b = b
-        glColor3f(self.r, self.g, self.b)
+        # self.r = r
+        # self.g = g
+        # self.b = b
+        # glColor3f(self.r, self.g, self.b)
 
         for i in range(self.width):
-            point = self.graph_batch.add(2, pyglet.gl.GL_POINTS, None,
-                        ('v2i',
-                         (i - 1, self.data_array[i - 1],
-                          i, self.data_array[i])
-                         ),
-                        )
+            self.graph_batch.add(1, pyglet.gl.GL_LINES, None, ('v2i', (i, self.data_array[i])))
 
         self.graph_batch.draw()
-        point.delete()
 
-        # Likely do not need these:
-        # pyglet.gl.glClear(pyglet.gl.GL_COLOR_BUFFER_BIT | pyglet.gl.GL_DEPTH_BUFFER_BIT)
-        # pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
-        # pyglet.gl.glEnableClientState(pyglet.gl.GL_VERTEX_ARRAY)
-        # pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
-        # pyglet.gl.glVertexPointer(2, pyglet.gl.GL_FLOAT, 0, 0)
 
 
 class Application():
@@ -402,6 +386,7 @@ def main():
     def on_draw():
         glClear(GL_COLOR_BUFFER_BIT)
         stele.draw()
+
 
     pyglet.clock.schedule_interval(app.update, 1 / 60.0)
     pyglet.clock.schedule_interval(app.roll, 1/30)
