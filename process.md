@@ -31,3 +31,13 @@ Huge problem...lol...for some reason the names all become the same after long en
 ## 16
 
 Starting with deleting the name module for now. Commenting, rather. Need to slow down the graph also.
+
+## 17
+
+Likely the final I'll be showing for thesis final for fall. I'm about to restructure everything.
+
+## 18
+
+Going to experiment with having everything in one file, other than vector2 and utilities.
+
+Removed the name module and graph test.

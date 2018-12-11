@@ -43,7 +43,8 @@ class Stele(object):
                     ]))
 
                 if x != 0 and y != 0:
-                    pyglet.text.Label(text=(str(x) + " to " + str(y)),
+                    index_tag.join(str(x) + " to " + str(y))
+                    pyglet.text.Label(text=(index_tag),
                                                     x = (x * self.q_width) + self.q_width/2,
                                                     y = common.window_height - ((y * self.q_height) + self.q_height/2),
                                                     anchor_x='center',

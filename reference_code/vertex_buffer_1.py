@@ -97,7 +97,6 @@ class MyApplication():
             green = random.randrange(256)
             blue = random.randrange(256)
             alpha = random.randrange(256)
-            shape_type = random.randrange(2)
             shape = Rectangle(x, y, width, height, d_x, d_y, (red, green, blue))
             self.shape_list.append(shape)
 
@@ -113,7 +112,6 @@ class MyApplication():
         """
         Render the screen.
         """
-        start = time.time()
 
         GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
         GL.glMatrixMode(GL.GL_MODELVIEW)
@@ -129,8 +127,6 @@ class MyApplication():
             render_rect_filled(shape, offset)
             offset += 4
 
-        elapsed = time.time() - start
-        print(elapsed)
 
 
 def main():
