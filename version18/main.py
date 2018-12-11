@@ -1,6 +1,7 @@
 import pyglet, math, random, time
 pyglet.options['debug_gl'] = False
-from game import resources, vector2, graph, util
+from game import resources, vector2, util
+from collections import deque
 from pyglet.gl import *
 
 window_width, window_height = 900, 700
@@ -17,7 +18,6 @@ explicit_window = pyglet.window.Window(window_width, window_height)
 stele_window = pyglet.window.Window(window_width, window_height)
 
 main_batch = pyglet.graphics.Batch()
-result_graph = graph.Graph(200, 0, 20, window_width)
 
 result_sum = 300 # Half of the height, atm. Used for graph.
 result_tag = pyglet.text.Label()
@@ -50,8 +50,6 @@ class Stele(object):
         pass
 
     def draw(self):
-        # if self.last_interaction != last_interaction:
-        #     self.last_interaction = last_interaction
         stele_labels = pyglet.graphics.Batch()
         for x in range(0, agent_count + 1):
 
@@ -95,8 +93,6 @@ class Stele(object):
                                                              x * self.q_width + self.q_width, y*self.q_height]
                                         ))
         stele_labels.draw()
-
-stele = Stele()
 
 class Agent(pyglet.sprite.Sprite):
 
@@ -280,6 +276,28 @@ class Agent(pyglet.sprite.Sprite):
             multiline=True, width = 40,
             align='left').draw()
 
+class Graph(object):
+
+    def __init__(self, r, g, b, width):
+        self.r = r
+        self.g = g
+        self.b = b
+        self.width = width
+
+        self.data_array = deque([])
+        for i in range(self.width + 1):
+            self.data_array.append(0)
+
+    def update(self, update_value):
+        self.data_array.append(update_value)
+        self.data_array.popleft()
+
+    def draw(self):
+        glColor3f(self.r, self.g, self.b)
+
+        for i in range(self.width):
+            pyglet.graphics.draw(2, pyglet.gl.GL_LINES,
+                ('v2i', (i - 1, self.data_array[i - 1], i, self.data_array[i])))
 
 def init_agents(batch = None):
     """Initialize and load agents into a returned array"""
@@ -298,6 +316,9 @@ def init_agents(batch = None):
 
 agents = init_agents(main_batch)
 
+stele = Stele()
+
+result_graph = Graph(200, 0, 20, window_width)
 
 @implicit_window.event
 def on_draw():
@@ -315,21 +336,15 @@ def on_draw():
         glColor3f(255,0,0)
         agent.vlist.draw(GL_LINES)  # Draw velocity vector
 
-    # for agent in agents:
-    #     announce("Hello")
-
 @explicit_window.event
 def on_draw():
     explicit_window.clear()
-
     result_graph.draw()
-
     result_tag.draw()
 
 @stele_window.event
 def on_draw():
     stele_window.clear()
-
     stele.draw()
 
 
@@ -361,9 +376,6 @@ def update(dt):
             obj_2 = agents[j]
             obj_1.interacts_with(obj_2)
             obj_2.interacts_with(obj_1)
-
-def refresh_data(dt):
-    pass
 
 if __name__ == '__main__':
     pyglet.clock.schedule_interval(update, 1 / 60.0)
