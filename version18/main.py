@@ -1,7 +1,8 @@
 from game import resources, vector2, util
 from collections import deque
 from pyglet.gl import *
-import pyglet, random
+import pyglet
+import random
 pyglet.options['debug_gl'] = False
 
 window_width, window_height = 900, 700
@@ -13,7 +14,7 @@ last_interaction = None
 agent_count = 7
 agent_index = []
 
-main_batch = pyglet.graphics.Batch()
+agent_batch = pyglet.graphics.Batch()
 
 result_sum = 300
 result_tag = pyglet.text.Label()
@@ -274,11 +275,10 @@ class Agent(pyglet.sprite.Sprite):
 
 class Graph(object):
 
-    def __init__(self, r, g, b, width):
-        self.r = r
-        self.g = g
-        self.b = b
+    def __init__(self, width):
         self.width = width
+
+        self.graph_batch = pyglet.graphics.Batch()
 
         self.data_array = deque([])
         for i in range(self.width + 1):
@@ -288,12 +288,29 @@ class Graph(object):
         self.data_array.append(update_value)
         self.data_array.popleft()
 
-    def draw(self):
+    def draw(self, r, g, b, ):
+        self.r = r
+        self.g = g
+        self.b = b
         glColor3f(self.r, self.g, self.b)
 
         for i in range(self.width):
-            pyglet.graphics.draw(2, pyglet.gl.GL_LINES,
-                ('v2i', (i - 1, self.data_array[i - 1], i, self.data_array[i])))
+            point = self.graph_batch.add(2, pyglet.gl.GL_POINTS, None,
+                        ('v2i',
+                         (i - 1, self.data_array[i - 1],
+                          i, self.data_array[i])
+                         ),
+                        )
+
+        self.graph_batch.draw()
+        point.delete()
+
+        # Likely do not need these:
+        # pyglet.gl.glClear(pyglet.gl.GL_COLOR_BUFFER_BIT | pyglet.gl.GL_DEPTH_BUFFER_BIT)
+        # pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
+        # pyglet.gl.glEnableClientState(pyglet.gl.GL_VERTEX_ARRAY)
+        # pyglet.gl.glDisable(pyglet.gl.GL_BLEND)
+        # pyglet.gl.glVertexPointer(2, pyglet.gl.GL_FLOAT, 0, 0)
 
 
 class Application():
@@ -307,7 +324,7 @@ class Application():
                 img=resources.white_agent_image,
                 x=random.randint(0, window_width),
                 y=random.randint(0, window_height),
-                batch=main_batch)
+                batch=agent_batch)
             new_agent.id = i
             agents.append(new_agent)
             agent_index.append("")
@@ -341,13 +358,10 @@ class Application():
                 obj_1.interacts_with(obj_2)
                 obj_2.interacts_with(obj_1)
 
-    def on_draw(self):
-        pass
-
 
 agents = []
 stele = Stele()
-graph = Graph(200, 0, 20, window_width)
+graph = Graph(window_width)
 
 
 def main():
@@ -363,8 +377,8 @@ def main():
 
     @implicit_window.event
     def on_draw():
-        implicit_window.clear()
-        main_batch.draw()
+        glClear(GL_COLOR_BUFFER_BIT)
+        agent_batch.draw()
         fps_display.draw()
 
         for i in range(len(agents)):
@@ -379,17 +393,17 @@ def main():
 
     @explicit_window.event
     def on_draw():
-        explicit_window.clear()
-        graph.draw()
+        glClear(GL_COLOR_BUFFER_BIT)
+        graph.draw(random.randint(0,255),random.randint(0,255),random.randint(0,255))
         result_tag.draw()
 
     @stele_window.event
     def on_draw():
-        stele_window.clear()
+        glClear(GL_COLOR_BUFFER_BIT)
         stele.draw()
 
     pyglet.clock.schedule_interval(app.update, 1 / 60.0)
-    pyglet.clock.schedule_interval(app.roll, 1)
+    pyglet.clock.schedule_interval(app.roll, 1/30)
 
     pyglet.app.run()
 

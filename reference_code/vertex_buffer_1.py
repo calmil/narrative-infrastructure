@@ -4,7 +4,6 @@ a bunch of rectangles on the screen.
 """
 
 import random
-import time
 import pyglet.gl as GL
 import pyglet
 import ctypes
