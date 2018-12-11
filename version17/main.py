@@ -1,6 +1,8 @@
 import pyglet, math, random, time
+pyglet.options['debug_gl'] = False
 from game import resources, vector2, agent, name, common, graph, stele
 from pyglet.gl import *
+
 #----------------------------------- WINDOWS -----------------------------------#
 implicit_window = pyglet.window.Window(common.window_width, common.window_height)
 explicit_window = pyglet.window.Window(common.window_width, common.window_height)
@@ -25,7 +27,7 @@ def init_agents(batch = None):
             img=resources.white_agent_image,
             x=random.randint(0, common.window_width),
             y=random.randint(0, common.window_height),
-            batch=batch)
+            batch=main_batch)
         new_agent.id = i
         agents.append(new_agent)
         common.agent_index.append("")
@@ -53,8 +55,8 @@ def on_draw():
         glColor3f(255,0,0)
         agent.vlist.draw(GL_LINES)  # Draw velocity vector
 
-    for agent in agents:
-        agent.announce("Hello")
+    # for agent in agents:
+    #     agent.announce("Hello")
 
 @explicit_window.event
 def on_draw():
