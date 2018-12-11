@@ -165,6 +165,8 @@ class Agent(pyglet.sprite.Sprite):
     def trade(self, other_agent):
         # Reset trade timer
         self.interaction_timers[other_agent.id] = 0
+        common.last_interaction = (self.id, other_agent.id)
+        print(common.last_interaction)
 
 
 #### Guessing
