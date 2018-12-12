@@ -390,7 +390,6 @@ def main():
     screen_2 = display.get_screens()[1]
     screen_3 = display.get_screens()[2]
 
-
     # implicit_window = pyglet.window.Window(window_width, window_height, screen=screen_1)
     # explicit_window = pyglet.window.Window(window_width, window_height, screen=screen_2)
     # stele_window = pyglet.window.Window(window_width, window_height, screen=screen_3)
