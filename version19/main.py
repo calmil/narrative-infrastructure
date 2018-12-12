@@ -414,7 +414,7 @@ def main():
 
 
     pyglet.clock.schedule_interval(app.update, 1 / 60.0)
-    pyglet.clock.schedule_interval(app.roll, 1/30)
+    pyglet.clock.schedule_interval(app.roll, 1/5)
 
     pyglet.app.run()
 
