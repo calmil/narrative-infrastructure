@@ -62,6 +62,7 @@ class Stele(object):
                                   anchor_x='center',
                                   batch=stele_batch)
             for y in range(0, agent_count + 1):
+                pyglet.gl.glColor3d(0, 0, 0)
                 stele_batch.add(5, pyglet.gl.GL_LINE_LOOP, None,
                                 ('v2f',
                                     [x*self.q_width,
@@ -73,7 +74,8 @@ class Stele(object):
                                      x*self.q_width+self.q_width,
                                      y*self.q_height,
                                      x*self.q_width,
-                                     y*self.q_height]))
+                                     y*self.q_height]),
+                                )
 
     def update(self):
         pass
@@ -309,13 +311,11 @@ class Graph(object):
             self.data_array.append(0)
             self.graph_batch.add(1, pyglet.gl.GL_LINES, None, ('v2i', (i, self.data_array[i])))
 
-
     def update(self, update_value):
         # Add value to end
         self.data_array.append(update_value)
         # Remove value at beginning
         self.data_array.popleft()
-
 
     def draw(self, r, g, b, ):
         for i in range(window_width):
@@ -382,7 +382,7 @@ def main():
     app.setup()
 
     implicit_window = pyglet.window.Window(window_width, window_height)
-    # explicit_window = pyglet.window.Window(window_width, window_height)
+    explicit_window = pyglet.window.Window(window_width, window_height)
     stele_window = pyglet.window.Window(window_width, window_height)
 
     @implicit_window.event
@@ -401,11 +401,11 @@ def main():
             glColor3f(255,0,0)
             agent.vlist.draw(GL_LINES)  # Draw velocity vector
 
-    # @explicit_window.event
-    # def on_draw():
-    #     glClear(GL_COLOR_BUFFER_BIT)
-    #     graph.draw(random.randint(0,255),random.randint(0,255),random.randint(0,255))
-    #     result_tag.draw()
+    @explicit_window.event
+    def on_draw():
+        glClear(GL_COLOR_BUFFER_BIT)
+        graph.draw(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        result_tag.draw()
 
     @stele_window.event
     def on_draw():
