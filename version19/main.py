@@ -4,9 +4,11 @@ from pyglet.gl import *
 import pyglet
 import random
 
-#
+# ---- Debug Options ----
 debug = True
-#
+grid = False
+# -----------------------
+
 pyglet.options['debug_gl'] = False
 
 window_width, window_height = 800, 500
@@ -64,21 +66,22 @@ class Stele(object):
                                   y=window_height-((x*self.q_height)+self.q_height/2),
                                   anchor_x='center',
                                   batch=stele_batch)
-            for y in range(0, agent_count + 1):
-                pyglet.gl.glColor3d(0, 0, 0)
-                stele_batch.add(5, pyglet.gl.GL_LINE_LOOP, None,
-                                ('v2f',
-                                    [x*self.q_width,
-                                     y*self.q_height,
-                                     x*self.q_width,
-                                     y*self.q_height+self.q_height,
-                                     x*self.q_width+self.q_width,
-                                     y*self.q_height+self.q_height,
-                                     x*self.q_width+self.q_width,
-                                     y*self.q_height,
-                                     x*self.q_width,
-                                     y*self.q_height]),
-                                )
+            if grid is True:
+                for y in range(0, agent_count + 1):
+                    pyglet.gl.glColor3d(0, 0, 0)
+                    stele_batch.add(5, pyglet.gl.GL_LINE_LOOP, None,
+                                    ('v2f',
+                                        [x*self.q_width,
+                                        y*self.q_height,
+                                        x*self.q_width,
+                                        y*self.q_height+self.q_height,
+                                        x*self.q_width+self.q_width,
+                                        y*self.q_height+self.q_height,
+                                        x*self.q_width+self.q_width,
+                                        y*self.q_height,
+                                        x*self.q_width,
+                                        y*self.q_height]),
+                                    )
 
     def update(self):
         pass
@@ -270,7 +273,7 @@ class Agent(pyglet.sprite.Sprite):
         stele.blink(self.id, other_agent.id)
         self.interaction_timers[other_agent.id] = 0
 
-    #gg Guessing
+    # Feedback / Guessing
     def guess(self):
         self.final_guess = round(self.bias/100)
 
@@ -310,15 +313,16 @@ class Graph(object):
         self.graph_batch = pyglet.graphics.Batch()
 
         for i in range(window_width):
-            self.v_list = self.graph_batch.add(1, pyglet.gl.GL_LINES, None, ('v2i', (i, 0)))
+            self.v_list = self.graph_batch.add(1, pyglet.gl.GL_LINES, None, ('v2i', (i, random.randint(0, window_height))))
 
     def update(self, update_value):
 
+        # START BY GETTING IT TO WORK WITH A RANDOM ASSORTMENT OF POINTS, UPDATING TO A KNOWN AMt
         for i in range(len(self.v_list.vertices)):
-            if i < len(self.v_list.vertices):
-                self.v_list.vertices[i] = self.v_list.vertices[i+1]
-            else:
-                self.v_list.vertices[i] = update_value
+            # if i == len(self.v_list.vertices):
+            #     self.v_list.vertices[i] = 20
+            # else:
+            self.v_list.vertices[i] = self.v_list.vertices[i-1]
 
     def draw(self):
         self.graph_batch.draw()
