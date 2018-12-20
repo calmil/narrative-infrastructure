@@ -3,8 +3,10 @@
 Future:
 
 - [ ] Make agent independent of Sprite class
+- [ ] Add "debug view" option, for quickly setting up on Macbook v. 3 Monitor layout. 
 - [ ] Get agents as shapes (for now)
 - [ ] Abstract Stele
+  - [ ] Experiment with the rectangle/pyramid layout! (Complete with dynamic tags). 
 
 v19:
 
