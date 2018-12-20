@@ -1,10 +1,12 @@
 from game import resources, vector2, util
 from collections import deque
 from pyglet.gl import *
-#from pyglet.window import Window
 import pyglet
 import random
 
+#
+debug = True
+#
 pyglet.options['debug_gl'] = False
 
 window_width, window_height = 800, 500
@@ -376,27 +378,28 @@ graph = Graph()
 
 
 def main():
-    """Main loop, where the windows and application are set up and the timed methods called. """
+    """
+    Main loop. Windows are set up, and updates are called.
+    """
 
     app = Application()
 
     app.setup()
 
     display = pyglet.window.get_platform().get_default_display()
-    screens = display.get_screens()
-    windows = []
 
-    screen_1 = display.get_screens()[0]
-    screen_2 = display.get_screens()[1]
-    screen_3 = display.get_screens()[2]
+    if debug is True:
+        implicit_window = pyglet.window.Window(window_width, window_height)
+        explicit_window = pyglet.window.Window(window_width, window_height)
+        stele_window = pyglet.window.Window(window_width, window_height)
+    else:
+        screen_1 = display.get_screens()[0]
+        screen_2 = display.get_screens()[1]
+        screen_3 = display.get_screens()[2]
 
-    # implicit_window = pyglet.window.Window(window_width, window_height, screen=screen_1)
-    # explicit_window = pyglet.window.Window(window_width, window_height, screen=screen_2)
-    # stele_window = pyglet.window.Window(window_width, window_height, screen=screen_3)
-
-    implicit_window = pyglet.window.Window(fullscreen=True, screen=screen_1)
-    explicit_window = pyglet.window.Window(fullscreen=True, screen=screen_2)
-    stele_window = pyglet.window.Window(fullscreen=True, screen=screen_3)
+        implicit_window = pyglet.window.Window(fullscreen=True, screen=screen_1)
+        explicit_window = pyglet.window.Window(fullscreen=True, screen=screen_2)
+        stele_window = pyglet.window.Window(fullscreen=True, screen=screen_3)
 
     @implicit_window.event
     def on_draw():

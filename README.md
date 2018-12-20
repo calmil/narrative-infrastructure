@@ -19,6 +19,10 @@ v18:
 
 ----
 
+## 19
+
+So far, a lot of improvements made. I'm mostly just excited to have it running relatively quickly. I'd like to find a way to get the graph to work before moving on to 20.
+
 ## 18
 
 Going to experiment with having everything in one file, other than vector2 and utilities.
