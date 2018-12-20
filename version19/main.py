@@ -1,5 +1,5 @@
 from game import resources, vector2, util
-from collections import deque
+# from collections import deque
 from pyglet.gl import *
 import pyglet
 import random
@@ -308,22 +308,19 @@ class Graph(object):
 
     def __init__(self):
         self.graph_batch = pyglet.graphics.Batch()
-        self.data_array = deque([])
 
-        for i in range(window_width + 1):
-            self.data_array.append(0)
-            self.graph_batch.add(1, pyglet.gl.GL_LINES, None, ('v2i', (i, self.data_array[i])))
+        for i in range(window_width):
+            self.v_list = self.graph_batch.add(1, pyglet.gl.GL_LINES, None, ('v2i', (i, 0)))
 
     def update(self, update_value):
-        # Add value to end
-        self.data_array.append(update_value)
-        # Remove value at beginning
-        self.data_array.popleft()
 
-    def draw(self, r, g, b, ):
-        for i in range(window_width):
-            self.graph_batch.add(1, pyglet.gl.GL_LINES, None, ('v2i', (i, self.data_array[i])))
+        for i in range(len(self.v_list.vertices)):
+            if i < len(self.v_list.vertices):
+                self.v_list.vertices[i] = self.v_list.vertices[i+1]
+            else:
+                self.v_list.vertices[i] = update_value
 
+    def draw(self):
         self.graph_batch.draw()
 
 
@@ -420,7 +417,7 @@ def main():
     @explicit_window.event
     def on_draw():
         glClear(GL_COLOR_BUFFER_BIT)
-        graph.draw(random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        graph.draw()
         result_tag.draw()
 
     @stele_window.event
