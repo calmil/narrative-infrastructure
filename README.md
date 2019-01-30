@@ -23,8 +23,6 @@ v18:
 
 ## 19
 
-Test
-
 So far, a lot of improvements made. I'm mostly just excited to have it running relatively quickly. I'd like to find a way to get the graph to work before moving on to 20.
 
 It's being really fussy. Right now I'm trying to get it to initialize with some random points, and then slowly start adding a set value, just to make sure the "update" method works right when pushing one value to the next "lower" index.
