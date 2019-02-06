@@ -1,4 +1,4 @@
-from game import resources, vector2, util
+from game import resources, vector2, util, agent_generation, group_generation, site_generation
 from collections import deque
 from pyglet.gl import *
 import pyglet
@@ -20,21 +20,16 @@ pyglet.options['debug_gl'] = False
 
 window_width, window_height = 800, 500
 
-last_interaction = None
-
 agent_count = 40
 agent_index = []
 agents = []
 
-_ALGINMENT_RADIUS, _ALIGNMENT_WEIGHT = 60, 0.5
-_COHESION_RADIUS, _COHESION_WEIGHT = 50, 0.5
-_SEPARATION_RADIUS, _SEPARATION_WEIGHT = 35, 0.25
-
+_ALGINMENT_RADIUS, _ALIGNMENT_WEIGHT    = 60, 0.5
+_COHESION_RADIUS, _COHESION_WEIGHT      = 50, 0.5
+_SEPARATION_RADIUS, _SEPARATION_WEIGHT  = 35, 0.25
 _WIGGLE_AMOUNT = 2
-
 _SPEED_LIMIT = 40
 _SPEED_MULTIPLIER = 1
-
 _INTERACTION_INTERVAL = 10
 _INTERACTION_RADIUS = 50
 
@@ -88,9 +83,6 @@ class Agent(pyglet.sprite.Sprite):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # self.trade_tag = pyglet.text.Label()
-        # self.data_tag = pyglet.text.Label()
-
         # Calculation
         self.total_agent_count = agent_count
         self.total_trades = 0
@@ -119,15 +111,17 @@ class Agent(pyglet.sprite.Sprite):
                                                             self.x+self.v.x,
                                                             self.y+self.v.y]))
 
-        self.bias = random.choice([-0.5, 0.5])
-        self.final_guess = None
-
         # Initialize all timers to 0
         for j in range(self.total_agent_count):
             self.interaction_timers[j] = 0
 
+
     def update(self, dt):
-        # Check edges
+        # Movement calculations.
+        self.x += self.v.x * dt
+        self.y += self.v.y * dt
+
+        # Check edges of window
         self.check_bounds()
 
         # Cap agent movement speed.
@@ -135,10 +129,6 @@ class Agent(pyglet.sprite.Sprite):
             self.v.x -= 20
         if self.v.y > _SPEED_LIMIT:
             self.v.y -= 20
-
-        # Movement calculations.
-        self.x += self.v.x * dt
-        self.y += self.v.y * dt
 
         # Calculate wiggle.
         self.random_offset = vector2.Vector2(random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2),
@@ -149,17 +139,13 @@ class Agent(pyglet.sprite.Sprite):
         self.vlist = pyglet.graphics.vertex_list(2, ('v2f', [self.x,
                                                              self.y,
                                                              self.x + self.v.x,
-                                                             self.y + self.v.y]))
-
-        # Display dynamic data
-        # self.data_tag = pyglet.text.Label(text=str(self.id),
-        #                                   x=self.x,
-        #                                   y=self.y,
-        #                                   anchor_x='center')
+                                                             self.y + self.v.y])
+                                                             )
 
         # Increase interaction timers for all other agents
         for i in range(self.total_agent_count):
             self.interaction_timers[i] += 1
+
 
     # Movement
     def check_bounds(self):
@@ -178,6 +164,7 @@ class Agent(pyglet.sprite.Sprite):
         elif self.y > max_y:
             self.y = min_y
 
+
     def compute_alignment(self, other_agent):
         # Alignment vector will be the sum of the two
         alignment_vector = vector2.Vector2(self.velocity_x + other_agent.velocity_x,
@@ -185,7 +172,9 @@ class Agent(pyglet.sprite.Sprite):
         alignment_vector.normalise()
         return alignment_vector
 
+
     def compute_cohesion(self, other_agent):
+        # Cohesion vector is the force of grouping.
         cohesion_vector = vector2.Vector2(self.x + other_agent.x,
                                           self.y + other_agent.y)
         cohesion_vector.x /= 2
@@ -193,12 +182,15 @@ class Agent(pyglet.sprite.Sprite):
         cohesion_vector.normalize()
         return cohesion_vector
 
+
     def compute_separation(self, other_agent):
+        # Separation is repelling force
         separation_vector = vector2.Vector2(other_agent.x - self.x,
                                             other_agent.y - self.y)
 
         separation_vector *= -1
         return separation_vector
+
 
     def compute_wiggle(self):
         wiggle_vector = vector2.Vector2(random.randint(_WIGGLE_AMOUNT/2 * -1,
@@ -210,7 +202,7 @@ class Agent(pyglet.sprite.Sprite):
     # Detection / Interaction
     def neighbor_lines(self, other_agent):
         actual_distance = util.distance(self.position, other_agent.position)
-        glColor3f(100, 100, 255)
+        glColor3f((4/actual_distance)*3, (4/actual_distance)*3, (4/actual_distance)*3)
 
         if actual_distance <= _INTERACTION_RADIUS:
             self.neighbor_vlist = pyglet.graphics.vertex_list(2, ('v2f', [
@@ -219,6 +211,7 @@ class Agent(pyglet.sprite.Sprite):
                 other_agent.x,
                 other_agent.y]))
             self.neighbor_vlist.draw(GL_LINES)
+
 
     def interacts_with(self, other_agent):
         actual_distance = util.distance(self.position, other_agent.position)
@@ -233,11 +226,7 @@ class Agent(pyglet.sprite.Sprite):
         if actual_distance <= _INTERACTION_RADIUS:
             if self.interaction_timers[other_agent.id] > _INTERACTION_INTERVAL:
                 self.trade(other_agent)
-                if abs(other_agent.bias) > abs(self.bias):
-                    if other_agent.bias < 0:
-                        self.bias -= 1
-                    elif other_agent.bias > 0:
-                        self.bias += 1
+
 
     def trade(self, other_agent):
         #stele.blink(self.x, self.y, other_agent.x, other_agent.y)
@@ -250,16 +239,8 @@ class Graph(object):
 
     def __init__(self):
         self.graph_batch = pyglet.graphics.Batch()
-        self.graph_points = deque(maxlen=window_width)
-
-        for i in range(window_width):
-            self.graph_points.append((i, random.randint(0,30)))
 
     def update(self, update_value):
-        self.graph_points.popleft()
-        # print(self.graph_points)
-        self.graph_points.append((window_width, update_value))
-        #self.graph_vlist = pyglet.graphics.vertex_list(window_width, ('v2f', [self.graph_points]))
 
     def draw(self):
         self.graph_batch.draw()
