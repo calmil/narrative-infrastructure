@@ -408,12 +408,12 @@ def get_nature():
     ]
 
     a_index = random.randint(0, len(alignment_nature) - 1)
-    c_index = random.randint(0, len(cohesion_nature)-1)
-    s_index = random.randint(0, len(separation_nature)-1)
+    c_index = random.randint(0, len(cohesion_nature) - 1)
+    s_index = random.randint(0, len(separation_nature) - 1)
 
-    a_weight = round_nearest(a_index / len(alignment_nature), 0.05)
-    c_weight = round_nearest(c_index / len(cohesion_nature), 0.05)
-    s_weight = round_nearest(s_index / len(separation_nature), 0.05)
+    a_weight = round_nearest(a_index / len(alignment_nature), 0.05) * 2
+    c_weight = round_nearest(c_index / len(cohesion_nature), 0.05) * 2
+    s_weight = round_nearest(s_index / len(separation_nature), 0.05) * 2
 
     nature = str(
                  alignment_nature[a_index] +
@@ -431,4 +431,5 @@ def get_nature():
 
 
 my_nature, a_val, c_val, s_val = get_nature()
-print(my_nature, a_val, c_val, s_val)
+
+# print(my_nature, a_val, c_val, s_val)
