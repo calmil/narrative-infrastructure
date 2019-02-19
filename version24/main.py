@@ -216,6 +216,7 @@ class Data(object):
         self.data_batch = pyglet.graphics.Batch()
 
     def update(self, update_value):
+        pass
 
     def draw(self):
         self.graph_batch.draw()
