@@ -7,7 +7,7 @@ import random
 
 pyglet.options['debug_gl'] = False
 
-window_width, window_height = 800, 500
+window_width, window_height = 1280, 1024
 
 result = None
 
@@ -390,14 +390,13 @@ def main():
     screen_2 = display.get_screens()[1]
     screen_3 = display.get_screens()[2]
 
-
     # implicit_window = pyglet.window.Window(window_width, window_height, screen=screen_1)
     # explicit_window = pyglet.window.Window(window_width, window_height, screen=screen_2)
     # stele_window = pyglet.window.Window(window_width, window_height, screen=screen_3)
 
-    implicit_window = pyglet.window.Window(fullscreen=True, screen=screen_1)
-    explicit_window = pyglet.window.Window(fullscreen=True, screen=screen_2)
-    stele_window = pyglet.window.Window(fullscreen=True, screen=screen_3)
+    explicit_window = pyglet.window.Window(window_width, window_height, fullscreen=True, screen=screen_1)
+    implicit_window = pyglet.window.Window(window_width, window_height, fullscreen=True, screen=screen_2)
+    stele_window = pyglet.window.Window(window_width, window_height, fullscreen=True, screen=screen_3)
 
     @implicit_window.event
     def on_draw():
