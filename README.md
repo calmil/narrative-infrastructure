@@ -3,14 +3,16 @@
 Future:
 
 - [ ] Make agent independent of Sprite class
+- [ ] Add "debug view" option, for quickly setting up on Macbook v. 3 Monitor layout.
 - [ ] Get agents as shapes (for now)
 - [ ] Abstract Stele
+  - [ ] Experiment with the rectangle/pyramid layout! (Complete with dynamic tags).
 
 v19:
 
 - [x] Resolve latency of Stele
 - [x] Get Stele to blink on contact
-- [ ] Get graph to work properly
+- [ ] Get graph to work properly (Start random and add in known value.)
 
 v18:
 
@@ -18,6 +20,12 @@ v18:
 - [x] Restructure according to "vertex_buffer_1" reference code
 
 ----
+
+## 19
+
+So far, a lot of improvements made. I'm mostly just excited to have it running relatively quickly. I'd like to find a way to get the graph to work before moving on to 20.
+
+It's being really fussy. Right now I'm trying to get it to initialize with some random points, and then slowly start adding a set value, just to make sure the "update" method works right when pushing one value to the next "lower" index.
 
 ## 18
 
