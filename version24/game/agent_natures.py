@@ -6,13 +6,10 @@ def round_nearest(x, a):
     return round(round(x / a) * a, -int(math.floor(math.log10(a))))
 
 def get_nature():
-    # weights and words that describe them.
-    # how do these affect their neighbors?
+    # Inner Nature
 
-    # are these how they affect? or are affected! !
-
-    # same dir. as neighbors
-    alignment_nature = [
+    # Strength of alignment to others.
+    inner_alignment_nature = [
         'passive',
         'agnostic',
         'listless',
@@ -28,8 +25,8 @@ def get_nature():
         'fanatical',
     ]
 
-    # drawn toward neighbors.
-    cohesion_nature = [
+    # Strength of allure toward others.
+    inner_cohesion_nature = [
         'uninterested',
         'lonesome',
         'solitary',
@@ -47,8 +44,8 @@ def get_nature():
         'isolophobial',
     ]
 
-    # repulsed
-    separation_nature = [
+    # Strength of repulsion from others.
+    inner_separation_nature = [
         'patient',
         'monastic',
         'tolerant',
@@ -64,28 +61,87 @@ def get_nature():
         'agoraphobic',
     ]
 
-    a_index = random.randint(0, len(alignment_nature) - 1)
-    c_index = random.randint(0, len(cohesion_nature) - 1)
-    s_index = random.randint(0, len(separation_nature) - 1)
+    ia_index = random.randint(0, len(inner_alignment_nature) - 1)
+    ic_index = random.randint(0, len(inner_cohesion_nature) - 1)
+    is_index = random.randint(0, len(inner_separation_nature) - 1)
 
-    a_weight = round_nearest(a_index / len(alignment_nature), 0.05) * 2
-    c_weight = round_nearest(c_index / len(cohesion_nature), 0.05) * 2
-    s_weight = round_nearest(s_index / len(separation_nature), 0.05) * 2
+    ia_weight = round_nearest(ia_index / len(inner_alignment_nature), 0.05) * 2
+    ic_weight = round_nearest(ic_index / len(inner_cohesion_nature), 0.05) * 2
+    is_weight = round_nearest(is_index / len(inner_separation_nature), 0.05) * 2
+
+    # Outer Nature
+
+    # Incentive for others to align with
+    outer_alignment_nature = [
+        'pessimistic',
+        'unseen',
+        'silent',
+        'predictable',
+        'uninspired',
+        'unimaginative',
+        'realistic',
+        'optimistic',
+        'utopian'
+    ]
+
+    # Incentive to come towards
+    outer_cohesion_nature = [
+        'drab',
+        'boring',
+        'pedestrian',
+        'plain',
+        'common',
+        'ordinary',
+        'nondescript',
+        'intriguing',
+        'attractive',
+        'alluring',
+        'cherubic',
+        'beautiful',
+        'resplendent',
+
+    ]
+
+    # Incentive to be repelled
+    outer_separation_nature = [
+        'amoral',
+        'nescient',
+        'dull',
+        'honest',
+        'spastic',
+        'coarse',
+        'uncouth',
+        'vulgar',
+        'repugnant',
+        'vile',
+        'repulsive',
+    ]
+
+    oa_index = random.randint(0, len(outer_alignment_nature) - 1)
+    oc_index = random.randint(0, len(outer_cohesion_nature) - 1)
+    os_index = random.randint(0, len(outer_separation_nature) - 1)
+
+    oa_weight = round_nearest(oa_index / len(outer_alignment_nature), 0.05) * 2
+    oc_weight = round_nearest(oc_index / len(outer_cohesion_nature), 0.05) * 2
+    os_weight = round_nearest(os_index / len(outer_separation_nature), 0.05) * 2
+
 
     nature = str(
-                 alignment_nature[a_index] +
+                 inner_alignment_nature[ia_index] +
                  ", " +
-                 cohesion_nature[c_index] +
+                 inner_cohesion_nature[ic_index] +
+                 ", " +
+                 inner_separation_nature[is_index] +
+                 ", " +
+                 outer_alignment_nature[oa_index] +
+                 ", " +
+                 outer_cohesion_nature[oc_index] +
                  ", & " +
-                 separation_nature[s_index]
+                 outer_separation_nature[os_index]
                 )
 
-    return nature, a_weight, c_weight, s_weight
-
-    # take count of possible natures
-    # get values equally scaled across a reasonable range, set for each
-    # return a value normalized.
+    return nature, ia_weight, oa_weight, ic_weight, oc_weight, is_weight, os_weight,
 
 
-my_nature, a_val, c_val, s_val = get_nature()
-print(my_nature, a_val, c_val, s_val)
+
+print(get_nature())
