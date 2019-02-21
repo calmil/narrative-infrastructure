@@ -399,7 +399,6 @@ def get_title():
     elif key == 7:
         title += (humanoid_species())
 
-    print(title)
     return title
 
 

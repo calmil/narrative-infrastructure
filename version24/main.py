@@ -1,4 +1,4 @@
-from game import resources, vector2, util, agent_natures, agent_titles,  group_generation, site_generation
+from game import resources, vector2, util, agent_natures, agent_titles,  group_generation, site_generation, event_generation
 from collections import deque
 from pyglet.gl import *
 import pyglet
@@ -7,7 +7,6 @@ import random
 # ---- Init Sequence ----
 agent_batch = pyglet.graphics.Batch()
 narrative_batch = pyglet.graphics.Batch()
-
 fps_display = pyglet.clock.ClockDisplay()
 
 # ---- Debug Options ----
@@ -20,16 +19,16 @@ pyglet.options['debug_gl'] = False
 
 window_width, window_height = 800, 500
 
-agent_count = 40
+agent_count = 20
 agent_index = []
 agents = []
 
 _ALGINMENT_RADIUS, _ALIGNMENT_WEIGHT = 60, 0.5
 _COHESION_RADIUS, _COHESION_WEIGHT = 50, 0.5
-_SEPARATION_RADIUS, _SEPARATION_WEIGHT = 35, 0.25
+_SEPARATION_RADIUS, _SEPARATION_WEIGHT = 35, 0.15
 _WIGGLE_AMOUNT = 2
 _SPEED_LIMIT = 20
-_SPEED_MULTIPLIER = 0.5
+_SPEED_MULTIPLIER = 0.3
 _INTERACTION_INTERVAL = 10
 _INTERACTION_RADIUS = 50
 
@@ -63,12 +62,15 @@ class Agent(pyglet.sprite.Sprite):
         self.title = agent_titles.get_title()
 
         # Nature
-        self.nature, self.alignment_weight, self.cohesion_weight, self.separation_weight = agent_natures.get_nature()
+        self.nature, self.ia_weight, self.oa_weight, self.ic_weight, self.oc_weight, self.is_weight, self.os_weight= agent_natures.get_nature()
 
         # Movement
-        self.alignment_weight /= _ALIGNMENT_WEIGHT
-        self.cohesion_weight /= _COHESION_WEIGHT
-        self.separation_weight /= _SEPARATION_WEIGHT
+        self.ia_weight /= _ALIGNMENT_WEIGHT
+        self.oa_weight /= _ALIGNMENT_WEIGHT
+        self.ic_weight /= _COHESION_WEIGHT
+        self.oc_weight /= _COHESION_WEIGHT
+        self.is_weight /= _SEPARATION_WEIGHT
+        self.os_weight /= _SEPARATION_WEIGHT
 
         self.velocity_x = random.randint(-50, 50)
         self.velocity_y = random.randint(-50, 50)
@@ -94,6 +96,7 @@ class Agent(pyglet.sprite.Sprite):
         # Initialize all timers to 0
         for j in range(self.total_agent_count):
             self.interaction_timers[j] = 0
+
 
     def update(self, dt):
 
@@ -193,13 +196,11 @@ class Agent(pyglet.sprite.Sprite):
         actual_distance = util.distance(self.position, other_agent.position)
 
         if actual_distance <= _ALGINMENT_RADIUS:
-            self.v += self.compute_alignment(other_agent) * \
-                self.alignment_weight
+            self.v += (self.compute_alignment(other_agent) * (self.ia_weight + other_agent.oa_weight))
         if actual_distance <= _COHESION_RADIUS:
-            self.v += self.compute_cohesion(other_agent) * self.cohesion_weight
+            self.v += (self.compute_cohesion(other_agent) * (self.ic_weight + other_agent.oc_weight))
         if actual_distance <= _SEPARATION_RADIUS:
-            self.v += self.compute_separation(other_agent) * \
-                self.separation_weight
+            self.v += (self.compute_separation(other_agent) * (self.is_weight + other_agent.is_weight))
 
         if actual_distance <= _INTERACTION_RADIUS:
             if self.interaction_timers[other_agent.id] > _INTERACTION_INTERVAL:
@@ -216,6 +217,7 @@ class Data(object):
         self.data_batch = pyglet.graphics.Batch()
 
     def update(self, update_value):
+        pass
 
     def draw(self):
         self.graph_batch.draw()
@@ -228,14 +230,24 @@ class Application():
         """Initialize agents"""
         for i in range(agent_count):
             random.seed(i)
-            new_agent = Agent(
-                img=resources.white_agent_image,
-                x=random.randint(0, window_width),
-                y=random.randint(0, window_height),
-                batch=agent_batch)
+            if random.randint(0,1) == 1:
+                new_agent = Agent(
+                    img = resources.clear_agent_image,
+                    x=random.randint(0, window_width),
+                    y=random.randint(0, window_height),
+                    batch=agent_batch)
+            else:
+                new_agent = Agent(
+                    img = resources.white_agent_image,
+                    x=random.randint(0, window_width),
+                    y=random.randint(0, window_height),
+                    batch=agent_batch)
             new_agent.id = i
             agents.append(new_agent)
             agent_index.append("")
+
+            print("Agent " + str(i) + " is a " + agents[i].title + " who is seen as " + agents[i].nature)
+
 
     def update(self, dt):
         # Go through each agent's update loop
