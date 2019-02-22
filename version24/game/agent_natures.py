@@ -143,5 +143,4 @@ def get_nature():
     return nature, ia_weight, oa_weight, ic_weight, oc_weight, is_weight, os_weight,
 
 
-
 print(get_nature())
