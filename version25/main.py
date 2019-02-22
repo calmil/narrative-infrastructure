@@ -19,7 +19,7 @@ pyglet.options['debug_gl'] = False
 
 window_width, window_height = 800, 500
 
-agent_count = 20
+agent_count = 100
 agent_index = []
 agents = []
 
@@ -31,6 +31,7 @@ _SPEED_LIMIT = 20
 _SPEED_MULTIPLIER = 0.3
 _INTERACTION_INTERVAL = 10
 _INTERACTION_RADIUS = 50
+_EVENT_RADIUS = 100
 
 
 class Narrative(object):
@@ -47,11 +48,25 @@ class Narrative(object):
 
     def __init__(self):
         self.duration = 0
+        self.story = ""
+        self.avg_distance = 0
 
-    def new_event(self):
+    def new_event(self, agent_1, agent_2):
+
+        self.duration += 1
+        
         # Duration timer begins (should be done in "agent interactions?")
             # If it passes a certain threshhold, an "event" is written.
+
         # New event begins
+        print("A " + agent_1.title + " is interacting with a " + agent_2.title)
+        print("Due to their " + agent_1.natures[1] + " nature, the " + agent_1.title + " is upset.") 
+        
+        self.current_distance = util.distance(agent_1.position, agent_2.position)
+        self.avg_distance = (self.current_distance + self.avg_distance)/2
+
+        print(self.avg_distance)
+
             # Event is passed agent vals:
                 # Titles
                 # Natures
@@ -71,6 +86,7 @@ class Narrative(object):
         # Type is then added to Batch and displayed
         # Should it be console?
         #
+
         pass
 
     def draw(self):
@@ -93,7 +109,7 @@ class Agent(pyglet.sprite.Sprite):
         self.title = agent_titles.get_title()
 
         # Nature
-        self.nature, self.ia_weight, self.oa_weight, self.ic_weight, self.oc_weight, self.is_weight, self.os_weight= agent_natures.get_nature()
+        self.natures, self.natures_str, self.ia_weight, self.oa_weight, self.ic_weight, self.oc_weight, self.is_weight, self.os_weight= agent_natures.get_nature()
 
         # Movement
         self.ia_weight *= _ALIGNMENT_WEIGHT
@@ -125,8 +141,13 @@ class Agent(pyglet.sprite.Sprite):
         #                                                     self.y+self.v.y]))
 
         # Initialize all timers to 0
+        self.proximity_timer = 0
         for j in range(self.total_agent_count):
             self.interaction_timers[j] = 0
+
+        self.event_timer = 0
+        self.delay_timer = 0
+
 
 
     def update(self, dt):
@@ -223,11 +244,33 @@ class Agent(pyglet.sprite.Sprite):
         if actual_distance <= _COHESION_RADIUS:
             self.v += (self.compute_cohesion(other_agent) * (self.ic_weight + other_agent.oc_weight))
         if actual_distance <= _SEPARATION_RADIUS:
-            self.v += (self.compute_separation(other_agent) * (self.is_weight + other_agent.is_weight))
+            self.v += (self.compute_separation(other_agent) * (self.is_weight + other_agent.os_weight))
 
-        if actual_distance <= _INTERACTION_RADIUS:
-            if self.interaction_timers[other_agent.id] > _INTERACTION_INTERVAL:
-                pass # ADD EVENT??
+        # if actual_distance <= _INTERACTION_RADIUS:
+        #     self.proximity_timer += 1
+        #     # if self.interaction_timers[other_agent.id] > _INTERACTION_INTERVAL:
+        #     if self.proximity_timer > 2:
+        #         print("Event between " + str(self.id) + " & " + str(other_agent.id))
+
+        else: self.proximity_timer = 0
+
+
+    def event_check(self, other_agent):
+        actual_distance = util.distance(self.position, other_agent.position)
+
+        if actual_distance <= _EVENT_RADIUS:
+            self.delay_timer = 0
+            self.event_timer += 1
+            if self.event_timer >= 250:
+                narrative.new_event(self, other_agent)
+                # print(str(self.id) + " & " + str(other_agent.id) + " is at " + str(self.event_timer))
+        
+        else:
+            self.delay_timer += 1
+            if self.delay_timer > 200:
+                self.event_timer = 0
+                # print(str(self.id) + " & " + str(other_agent.id) + " is at " + str(self.event_timer))
+
 
 
 class Data(object):
@@ -267,7 +310,7 @@ class Application():
             agent_index.append("")
 
 
-            print("Agent " + str(i) + " is a " + agents[i].title + " who is seen as " + agents[i].nature)
+            print("Agent " + str(i) + " is a " + agents[i].title + " who is seen as " + agents[i].natures_str)
 
 
     def update(self, dt):
@@ -282,6 +325,9 @@ class Application():
                 obj_2 = agents[j]
                 obj_1.interacts_with(obj_2)
                 obj_2.interacts_with(obj_1)
+
+                obj_1.event_check(obj_2)
+                
 
 
 narrative = Narrative()

@@ -126,7 +126,14 @@ def get_nature():
     os_weight = round_nearest(os_index / len(outer_separation_nature), 0.05) * 2
 
 
-    nature = str(
+    natures = [inner_alignment_nature[ia_index],
+               inner_cohesion_nature[ic_index],
+               inner_separation_nature[is_index],
+               outer_alignment_nature[oa_index],
+               outer_cohesion_nature[oc_index],
+               outer_separation_nature[os_index]]
+
+    natures_str = str(
                  inner_alignment_nature[ia_index] +
                  ", " +
                  inner_cohesion_nature[ic_index] +
@@ -140,7 +147,7 @@ def get_nature():
                  outer_separation_nature[os_index]
                 )
 
-    return nature, ia_weight, oa_weight, ic_weight, oc_weight, is_weight, os_weight,
+    return natures, natures_str, ia_weight, oa_weight, ic_weight, oc_weight, is_weight, os_weight,
 
 
 print(get_nature())
