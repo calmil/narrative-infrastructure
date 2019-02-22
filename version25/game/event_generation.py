@@ -1,10 +1,25 @@
 import random
 
 
+duration_natures =[
+    'brief',
+    'short-lived',
+    'quick',
+    'unintentional',
+    'ac'
+]
 
-
-
-
-
-    # Begin timing length of event
-    # duration += 1
+distance_natures = [
+    'loving',
+    'intimate',
+    'tender',
+    'sincere',
+    'interpersonal',
+    'close-knit',
+    'professional',
+    'impersonal',
+    'terse',
+    'distant',
+    'unenthusiastic',
+    'tepid',
+]
