@@ -1,5 +1,5 @@
 import random
-
+from termcolor import colored, cprint
 # New event begins
             # Event is passed agent vals:
                 # Titles
@@ -47,7 +47,16 @@ physical_interaction_adverbs = [
     'eagerly',
     'aggressively',
     'curiously',
-    'tenderly'
+    'meditatively',
+    'rapturously',
+    'tenderly',
+    ', without thought,',
+    ', considerately,',
+    'unenthusiastically',
+    'audibly',
+    'weakly',
+    'impishly',
+    'slowly',
 ]
 
 physical_interaction_verbs = [
@@ -69,7 +78,7 @@ symbolic_interaction_adverbs = [
     'unenthusiastically',
     'unenthusiastically',
     'enthusiastically',
-    'bravely',
+    'half-heartedly',
 ]
 
 symbolic_interaction_verbs = [
@@ -115,16 +124,32 @@ phrase_endings = [
 
 # Physical event (triggered by proximity)
 
-def event_gen(obj_1, obj_2):
+def physical_event(obj_1, obj_2):
     phrase = ""
     if random.choice([True, False]):
-        phrase += (random.choice(phrase_beginnings))
-        phrase += (", a ")
+        phrase += (random.choice(phrase_beginnings) + ', a ')
     else:
-        phrase += ("A ")
-    phrase += (obj_1.title)
-    if random.choice([True, False]):
+        phrase += 'A '
+    phrase += colored(obj_1.title, 'white', obj_1.color_str)
+    if random.choice([True, False, False, False, False, False]):
         phrase += (" " + random.choice(physical_interaction_adverbs))
-    phrase += (" " +  random.choice(physical_interaction_verbs) + " a " + obj_2.title)
+    phrase += ' ' +  random.choice(physical_interaction_verbs)
+    phrase += ' a '
+    phrase += colored(obj_2.title, 'white', obj_2.color_str)
+    if random.choice([True, False, False, False]):
+        phrase += (", " + random.choice(phrase_endings))
 
     print(phrase)
+
+response_beginnings = [
+    'astonished',
+    'terrified',
+    'ang'
+]
+
+def physical_event_response(obj_1, obj_2):
+    phrase = ""
+    if random.choice([True, False]):
+        phrase += (random.choice(response_beginnings) + ', a')
+    else:
+        phrase += 'A '
