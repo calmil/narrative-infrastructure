@@ -8,8 +8,8 @@ def center_image(image):
 pyglet.resource.path = ['../resources']
 pyglet.resource.reindex()
 
-white_agent_image = pyglet.resource.image("white_agent.png")
-center_image(white_agent_image)
+white = pyglet.resource.image("white.png")
+center_image(white)
 
 red = pyglet.resource.image("red.png")
 center_image(red)
