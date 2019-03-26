@@ -163,7 +163,6 @@ def political_title():
         'prime minister',
         'president',
         'minister',
-        'chargés d\'affaires',
         'envoy',
         'monarch',
         'papal nuncio',
@@ -204,9 +203,7 @@ def military_title():
         'cadet'
         'seaman',
         'private',
-        'gunner',
         'trooper',
-        'airman',
         'warrant officer',
         'sergeant',
         'corporal',
