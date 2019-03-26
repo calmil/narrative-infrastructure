@@ -1,34 +1,17 @@
 import random
-from termcolor import colored, cprint
-# New event begins
-            # Event is passed agent vals:
-                # Titles
-                # Natures
-                # Speeds
-                # Avg. Distance?
-        # It is "evaluated"
-            # How long?
-            # Anyone else involved?
-            # Natures are compared, and a "difference" is generated (based on diff in internal vals?)
-            # How did it end?
-        # Type is generated (from event_gen):
-            # How strong/long?
-            # What kind of a relationship? Formal? Militaristic? Diplomatic? Educational?
-            # Will they be changed?
-            # Was a "site" made?
-            # How will this event be referenced in the future?
+from termcolor import colored
+
 
 # NEED A CHECK FOR VOWEL NAMES LOL
 
 # Physical event (triggered by proximity)
-
 def physical_event(obj_1, obj_2):
     obj_1_tag = colored(obj_1.title, color=None, on_color=obj_1.color_str)
     obj_2_tag = colored(obj_2.title, color=None, on_color=obj_2.color_str)
 
     phrase = ""
 
-    if random.choice([True, False]):
+    if random.choice([True, False, False, False, False]):
         phrase += (random.choice(phrase_beginnings) + ', a ')
     else:
         phrase += 'A '
@@ -36,7 +19,7 @@ def physical_event(obj_1, obj_2):
     phrase += obj_1_tag
     if random.choice([True, False, False, False, False, False]):
         phrase += (" " + random.choice(physical_interaction_adverbs))
-    phrase += ' ' +  random.choice(physical_interaction_verbs)
+    phrase += ' ' + random.choice(physical_interaction_verbs)
     phrase += ' a '
     phrase += obj_2_tag
     if random.choice([True, False, False, False]):
@@ -71,8 +54,7 @@ def physical_event(obj_1, obj_2):
         print(response_phrase)
 
 
-
-duration_natures =[
+duration_natures = [
     'brief',
     'short-lived',
     'quick',
@@ -102,6 +84,7 @@ physical_interaction_adverbs = [
     'eagerly',
     'aggressively',
     'curiously',
+    'furtively',
     'meditatively',
     'rapturously',
     'tenderly',
@@ -115,6 +98,9 @@ physical_interaction_adverbs = [
 ]
 
 physical_interaction_verbs = [
+    'feigns an attack on',
+    'pursues',
+    'signs toward',
     'pushes',
     'shoves',
     'pulls',
@@ -122,7 +108,8 @@ physical_interaction_verbs = [
     'tickles',
     'punches',
     'sidles up to',
-    'kisses',
+    'nearly tramples',
+    'kisses the hand of',
 ]
 
 # - - - - - - - - - - - - - - - - -
@@ -176,10 +163,11 @@ phrase_endings = [
     'for unknown reasons',
     'due to unforseen circumstances',
     'though unbeknownst to many',
-    'for furtive reasons',
+    'for mysterious reasons',
+    'not unusual within this great mystery'
     'through sheer circumstance',
     'driven by unknown motives',
-    'bringing closure',
+    'bringing a sense of closure',
 ]
 
 # - - - Response - - - - - - - - - - - - - - - -
@@ -220,11 +208,14 @@ response_actions = [
 ]
 
 response_directions = [
+    'back at',
     'at',
     'toward',
     'towards',
+    'in response to',
     'in the direction of',
     'directly at',
+    'straight back to',
     'near',
     'because of'
 ]
@@ -240,7 +231,6 @@ response_thoughts = [
     'understands',
     'comes to terms',
 ]
-
 
 physical_response_endings = [
     'immediately',

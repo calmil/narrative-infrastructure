@@ -1,6 +1,4 @@
 import random
-import math
-
 
 
 def royal_title():
@@ -66,7 +64,7 @@ def royal_title():
         # 'caesar', ''
     ]
 
-    return royal_titles[(random.randint(0,len(royal_titles)-1))]
+    return royal_titles[(random.randint(0, len(royal_titles)-1))]
 
 
 def academic_title():
@@ -102,7 +100,7 @@ def academic_title():
         # 'meiyo kyōju',
     ]
 
-    return academic_titles[(random.randint(0,len(academic_titles)-1))]
+    return academic_titles[(random.randint(0, len(academic_titles)-1))]
 
 
 def religious_title():
@@ -152,7 +150,7 @@ def religious_title():
         # 'exarch',
     ]
 
-    return religious_titles[(random.randint(0,len(religious_titles)-1))]
+    return religious_titles[(random.randint(0, len(religious_titles)-1))]
 
 
 def political_title():
@@ -179,7 +177,8 @@ def political_title():
         # 'apocrisiarius'
     ]
 
-    return political_titles[(random.randint(0,len(political_titles)-1))]
+    return political_titles[(random.randint(0, len(political_titles)-1))]
+
 
 def military_title():
     # [x] in
@@ -243,7 +242,8 @@ def military_title():
         # 'argbod',
         # ''
     ]
-    return military_titles[(random.randint(0,len(military_titles)-1))]
+    return military_titles[(random.randint(0, len(military_titles)-1))]
+
 
 def job_title():
     # [x] / [x] at [group]
@@ -272,67 +272,7 @@ def job_title():
         'pianist',
     ]
 
-    return job_titles[(random.randint(0,len(job_titles)-1))]
-
-# def mythical_species():
-#     # [x]
-#     mythical_species = [
-#         'familiar',
-#         'drude',
-#         'cambion',
-#         'spectra',
-#         'goblin',
-#         'hellhound',
-#         'kitsune',
-#         'hind',
-#         'qilin',
-#         'kelpie',
-#         'griffin',
-#         'black dog',
-#         'satyr',
-#         'manticore',
-#         'mermaid',
-#         'kishi',
-#         'drop bear',
-#         'bunyip',
-#         'baku',
-#         'satori',
-#         'yowie',
-#         'yeti',
-#         'cipactli',
-#         'sewer alligator',
-#         'wyvern',
-#         'basilisk',
-#         'gorgon',
-#         'homunculus',
-#         'tulpa',
-#         'shabti',
-#         'werewolf',
-#         'cyclops',
-#         'hydra',
-#         'valkyrie',
-#         'ghost',
-#         'banshee',
-#     ]
-#     return mythical_species[(random.randint(0,len(mythical_species)-1))]
-
-# def humanoid_species():
-#     humanoid_species = [
-#         'incubus',
-#         'succubus',
-#         'angel',
-#         'demon',
-#         'witch',
-#         'god',
-#         'genie',
-#         'nymph',
-#         'dryad',
-#         'cherubim',
-#         'erelim',
-#         'chayot',
-#     ]
-
-#     return humanoid_species[(random.randint(0,len(humanoid_species)-1))]
+    return job_titles[(random.randint(0, len(job_titles)-1))]
 
 
 # -------------------
@@ -363,13 +303,6 @@ title_prefixes = [
 ]
 
 
-
-
-
-# def round_nearest(x, a):
-#     return round(round(x / a) * a, -int(math.floor(math.log10(a))))
-
-
 def get_title():
     title = ""
     key = random.randint(0, 5)
@@ -396,5 +329,3 @@ def get_title():
     #     title += (humanoid_species())
 
     return title
-
-
