@@ -18,12 +18,65 @@ from termcolor import colored, cprint
             # Was a "site" made?
             # How will this event be referenced in the future?
 
+# NEED A CHECK FOR VOWEL NAMES LOL
+
+# Physical event (triggered by proximity)
+
+def physical_event(obj_1, obj_2):
+    obj_1_tag = colored(obj_1.title, color=None, on_color=obj_1.color_str)
+    obj_2_tag = colored(obj_2.title, color=None, on_color=obj_2.color_str)
+
+    phrase = ""
+
+    if random.choice([True, False]):
+        phrase += (random.choice(phrase_beginnings) + ', a ')
+    else:
+        phrase += 'A '
+
+    phrase += obj_1_tag
+    if random.choice([True, False, False, False, False, False]):
+        phrase += (" " + random.choice(physical_interaction_adverbs))
+    phrase += ' ' +  random.choice(physical_interaction_verbs)
+    phrase += ' a '
+    phrase += obj_2_tag
+    if random.choice([True, False, False, False]):
+        phrase += (", " + random.choice(phrase_endings))
+
+    print(phrase)
+
+    # Response Phrase
+    if random.choice([True, False, False]):
+        response_phrase = ""
+    # Beginning check
+        if random.choice([True, False, False, False]):
+            response_phrase += (random.choice(response_beginnings)).capitalize()
+            if random.choice([True, False, False]):
+                response_phrase += random.choice(response_beginnings_addition)
+            response_phrase += ', the '
+    # No beginning
+        else:
+            response_phrase += 'The '
+        response_phrase += obj_2_tag
+        if random.choice([True, False]):
+    # Physical Reaction
+            response_phrase += (
+                ' ' + random.choice(response_actions) +
+                ' ' + random.choice(response_directions) + ' the '
+                )
+            response_phrase += obj_1_tag
+        else:
+    # Thought
+            response_phrase += ' ' + random.choice(response_thoughts)
+
+        print(response_phrase)
+
+
+
 duration_natures =[
     'brief',
     'short-lived',
     'quick',
     'unintentional',
-    'ac'
 ]
 
 distance_natures = [
@@ -40,6 +93,8 @@ distance_natures = [
     'unenthusiastic',
     'tepid',
 ]
+
+# - - - - Physical Interaction - - - - - - - -
 
 physical_interaction_adverbs = [
     'playfully',
@@ -70,6 +125,9 @@ physical_interaction_verbs = [
     'kisses',
 ]
 
+# - - - - - - - - - - - - - - - - -
+
+# Mapped
 symbolic_interaction_adverbs = [
     'audibly',
     'weakly',
@@ -81,6 +139,7 @@ symbolic_interaction_adverbs = [
     'half-heartedly',
 ]
 
+# Mapped
 symbolic_interaction_verbs = [
     'winks at',
     'grins at',
@@ -94,15 +153,19 @@ symbolic_interaction_verbs = [
     'curses'
 ]
 
-reaction_verbs = [
-    'surprises',
-    'upsets',
-    'pleases',
-    'distracts',
-    'serves as punishment for',
-]
+# reaction_verbs = [
+#     'surprises',
+#     'upsets',
+#     'pleases',
+#     'distracts',
+#     'serves as punishment for',
+# ]
 
 phrase_beginnings = [
+    'It seems',
+    'From what you can tell',
+    'To your surprise',
+    'Beyond reasonable expectations',
     'Surprisingly',
     'To the surprise of many',
     'To no one\'s surprise',
@@ -119,37 +182,70 @@ phrase_endings = [
     'bringing closure',
 ]
 
+# - - - Response - - - - - - - - - - - - - - - -
 
-# NEED A CHECK FOR VOWEL NAMES LOL
-
-# Physical event (triggered by proximity)
-
-def physical_event(obj_1, obj_2):
-    phrase = ""
-    if random.choice([True, False]):
-        phrase += (random.choice(phrase_beginnings) + ', a ')
-    else:
-        phrase += 'A '
-    phrase += colored(obj_1.title, 'white', obj_1.color_str)
-    if random.choice([True, False, False, False, False, False]):
-        phrase += (" " + random.choice(physical_interaction_adverbs))
-    phrase += ' ' +  random.choice(physical_interaction_verbs)
-    phrase += ' a '
-    phrase += colored(obj_2.title, 'white', obj_2.color_str)
-    if random.choice([True, False, False, False]):
-        phrase += (", " + random.choice(phrase_endings))
-
-    print(phrase)
-
+# Mapped
 response_beginnings = [
     'astonished',
     'terrified',
-    'ang'
+    'angered',
+    'bothered',
+    # NEUTRAL
+    'unsettled',
+    'interested',
+    # POSITIVE
+    'intrigued',
+    'excited',
+    'enraptured',
+    ]
+
+response_beginnings_addition = [
+    'by this',
+    'by the idea that this could happen',
+    'at even the mere possibility',
+    'by the implications',
+    'at the chance',
 ]
 
-def physical_event_response(obj_1, obj_2):
-    phrase = ""
-    if random.choice([True, False]):
-        phrase += (random.choice(response_beginnings) + ', a')
-    else:
-        phrase += 'A '
+# Mapped
+response_actions = [
+    'howls',
+    'screams',
+    'hollers',
+    'glares',
+    'stares aggressively',
+    'flares their nostrils',
+    'simply nods',
+    'breathes heavily',
+]
+
+response_directions = [
+    'at',
+    'toward',
+    'towards',
+    'in the direction of',
+    'directly at',
+    'near',
+    'because of'
+]
+
+# Mapped
+response_thoughts = [
+    'laments',
+    'curses',
+    'ignores',
+    'does not understand',
+    'takes note',
+    'aknowledges',
+    'understands',
+    'comes to terms',
+]
+
+
+physical_response_endings = [
+    'immediately',
+    'privately',
+    'deliberately',
+    'with ease',
+    'automatically',
+]
