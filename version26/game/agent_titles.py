@@ -307,10 +307,12 @@ def get_title():
     title = ""
     key = random.randint(0, 5)
 
+    # Add title prefix
     if key < 2:
         title += (title_rankings[random.randint(0, len(title_rankings) - 1)])
         title += " "
 
+    # Generate title
     if key == 0:
         title += (royal_title())
     elif key == 1:

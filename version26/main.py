@@ -1,4 +1,4 @@
-from game import resources, vector2, util, agent_natures, agent_titles,  group_generation, site_generation, event_generation
+from game import bio, resources, vector2, util, agent_natures, agent_titles,  group_generation, site_generation, event_generation
 from collections import deque
 from termcolor import colored, cprint
 from pyglet.gl import *
@@ -47,16 +47,23 @@ class Agent(pyglet.sprite.Sprite):
         self.title = agent_titles.get_title()
 
         # Nature
-        self.nature, self.nature_str, self.ia_weight, self.oa_weight, self.ic_weight, self.oc_weight, self.is_weight, self.os_weight= agent_natures.get_nature()
-        self.color_str = ""
+        (self.nature,
+         self.nature_str,
+         self.ia_index,
+         self.oa_index,
+         self.ic_index,
+         self.oc_index,
+         self.is_index,
+         self.os_index) = agent_natures.get_nature()
 
-        # Movement
-        self.ia_weight *= _ALIGNMENT_WEIGHT
-        self.oa_weight *= _ALIGNMENT_WEIGHT
-        self.ic_weight *= _COHESION_WEIGHT
-        self.oc_weight *= _COHESION_WEIGHT
-        self.is_weight *= _SEPARATION_WEIGHT
-        self.os_weight *= _SEPARATION_WEIGHT
+        self.ia_weight = _ALIGNMENT_WEIGHT * (util.round_nearest(self.oa_index/len(agent_natures.outer_alignment_nature), 0.05) * 2)
+        self.ic_weight = _ALIGNMENT_WEIGHT * (util.round_nearest(self.oc_index/len(agent_natures.outer_cohesion_nature), 0.05) * 2)
+        self.is_weight = _COHESION_WEIGHT * (util.round_nearest(self.os_index/len(agent_natures.outer_separation_nature), 0.05) * 2)
+        self.oa_weight = _COHESION_WEIGHT * (util.round_nearest(self.oa_index/len(agent_natures.outer_alignment_nature), 0.05) * 2)
+        self.oc_weight = _SEPARATION_WEIGHT * (util.round_nearest(self.oc_index/len(agent_natures.outer_cohesion_nature), 0.05) * 2)
+        self.os_weight = _SEPARATION_WEIGHT * (util.round_nearest(self.os_index/len(agent_natures.outer_separation_nature), 0.05) * 2)
+
+        self.color_str = ""
 
         self.velocity_x = random.randint(-50, 50)
         self.velocity_y = random.randint(-50, 50)
@@ -72,6 +79,8 @@ class Agent(pyglet.sprite.Sprite):
                                                    self.x + self.v.x,
                                                    self.y + self.v.y]))
 
+
+        self.history = []
         # Initialize all timers to 0
         # for j in range(self.total_agent_count):
         #     self.interaction_timers[j] = 0
@@ -193,45 +202,29 @@ class Narrative(object):
                   )
 
     def new_event(self):
-        # Duration timer begins (should be done in "agent interactions?")
-            # If it passes a certain threshhold, an "event" is written.
-        # New event begins
-            # Event is passed agent vals:
-                # Titles
-                # Natures
-                # Speeds
-                # Avg. Distance?
-        # It is "evaluated"
-            # How long?
-            # Anyone else involved?
-            # Natures are compared, and a "difference" is generated (based on diff in internal vals?)
-            # How did it end?
-        # Type is generated (from event_gen):
-            # How strong/long?
-            # What kind of a relationship? Formal? Militaristic? Diplomatic? Educational?
-            # Will they be changed?
-            # Was a "site" made?
-            # How will this event be referenced in the future?
-        # Type is then added to Batch and displayed
-        # Should it be console?
-        #
         pass
 
     def draw(self):
         narrative_batch.draw()
 
 
-class Data(object):
-    """Generates a graph of a set width, which can be updated. """
+class Bio_Screen(object):
+    """Manages the display of the biographies created with the 'bio' module"""
 
     def __init__(self):
-        self.data_batch = pyglet.graphics.Batch()
-
-    def update(self, update_value):
         pass
 
-    def draw(self):
-        self.graph_batch.draw()
+
+    def draw(self, dt):
+        created_tag = pyglet.text.Label('Hello, world',
+                    font_name='Times New Roman',
+                    font_size=36,
+                    color=((255,255,255,255)),
+                    x=window_width//2,
+                    y=window_height//2,
+                    anchor_x='center', anchor_y='center')
+
+        created_tag.draw()
 
 
 class Application():
@@ -301,7 +294,7 @@ def main():
     """
 
     narrative = Narrative()
-    data = Data()
+    bio_screen = Bio_Screen()
     app = Application()
     app.setup()
 
@@ -310,7 +303,7 @@ def main():
     if debug is True:
         implicit_window = pyglet.window.Window(
             window_width, window_height, vsync=False)
-        explicit_window = pyglet.window.Window(
+        bio_window = pyglet.window.Window(
             window_width, window_height, vsync=False)
         narrative_window = pyglet.window.Window(
             window_width, window_height, vsync=False)
@@ -321,10 +314,12 @@ def main():
 
         implicit_window = pyglet.window.Window(
             fullscreen=True, screen=screen_1, vsync=False)
-        explicit_window = pyglet.window.Window(
+        bio_window = pyglet.window.Window(
             fullscreen=True, screen=screen_2, vsync=False)
         narrative_window = pyglet.window.Window(
             fullscreen=True, screen=screen_3, vsync=False)
+
+
 
     @implicit_window.event
     def on_draw():
@@ -353,14 +348,16 @@ def main():
             glColor3f(255, 0, 0)
             agent.vlist.draw(GL_LINES)  # Draw velocity vector
 
-    @narrative_window.event
+
+    @bio_window.event
     def on_draw():
         glClear(GL_COLOR_BUFFER_BIT)
-        narrative_window.clear()
-        narrative.draw()
+        bio_window.clear()
+        bio_screen.draw()
 
     pyglet.clock.schedule_interval(app.update, 1 / 60.0)
     pyglet.clock.schedule_interval(narrative.update, 1 / 60.0)
+    pyglet.clock.schedule_interval(bio_screen.draw, 1 / 60.0)
 
     pyglet.app.run()
 
