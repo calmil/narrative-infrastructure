@@ -1,5 +1,33 @@
 import random
+import math
 from termcolor import colored
+
+def round_nearest(x, a):
+    return round(round(x / a) * a, -int(math.floor(math.log10(a))))
+
+def map_string(obj, quality, target_list):
+    """Maps the relevant quality to a list of strings
+       (whether verbs, adverbs, or adjectives), describing a situation."""
+
+    nature_list_sizes = {'inner_alignment':12,
+                       'inner_cohesion':14,
+                       'inner_separation':12,
+                       'outer_alignment':8,
+                       'outer_cohesion':12,
+                       'outer_separation':10}
+
+    quality_index = {'inner_alignment':obj.ia_index,
+                     'inner_cohesion':obj.ic_index,
+                     'inner_separation':obj.is_index,
+                     'outer_alignment':obj.oa_index,
+                     'outer_cohesion':obj.oa_index,
+                     'outer_separation':obj.oa_index}
+
+    scalar = len(target_list)/nature_list_sizes[quality]
+    mapped_index = math.floor(quality_index[quality] * scalar) - 1
+    mapped_string = target_list[mapped_index]
+
+    return mapped_string
 
 
 # NEED A CHECK FOR VOWEL NAMES LOL
@@ -12,44 +40,65 @@ def physical_event(obj_1, obj_2):
     phrase = ""
 
     if random.choice([True, False, False, False, False]):
-        phrase += (random.choice(phrase_beginnings) + ', a ')
+        phrase += map_string(obj_1, 'outer_separation', phrase_beginnings)
+        phrase += ', a '
     else:
         phrase += 'A '
 
     phrase += obj_1_tag
     if random.choice([True, False, False, False, False, False]):
-        phrase += (" " + random.choice(physical_interaction_adverbs))
-    phrase += ' ' + random.choice(physical_interaction_verbs)
+        phrase += ' '
+        phrase += map_string(obj_1, 'inner_separation', physical_interaction_adverbs)
+
+    phrase += ' '
+    phrase += map_string(obj_1, 'outer_separation', physical_interaction_verbs)
     phrase += ' a '
     phrase += obj_2_tag
-    if random.choice([True, False, False, False]):
-        phrase += (", " + random.choice(phrase_endings))
 
+    if random.choice([True, False, False, False]):
+        phrase += ', '
+        phrase += (random.choice(phrase_endings))
+    phrase += '.'
+
+    obj_1.history.append(phrase)
     print(phrase)
 
-    # Response Phrase
+    # - - - - - - Response Phrase - - - - - -
+
     if random.choice([True, False, False]):
         response_phrase = ""
-    # Beginning check
+
         if random.choice([True, False, False, False]):
-            response_phrase += (random.choice(response_beginnings)).capitalize()
+            response_phrase += map_string(obj_1, 'inner_separation', response_beginnings).capitalize()
+
             if random.choice([True, False, False]):
+                response_phrase += ' '
                 response_phrase += random.choice(response_beginnings_addition)
+
             response_phrase += ', the '
-    # No beginning
+
         else:
             response_phrase += 'The '
         response_phrase += obj_2_tag
+
         if random.choice([True, False]):
-    # Physical Reaction
+
+            if random.choice([True, False]):
+                response_phrase += ' '
+                response_phrase += random.choice(physical_response_natures)
+
             response_phrase += (
                 ' ' + random.choice(response_actions) +
                 ' ' + random.choice(response_directions) + ' the '
                 )
             response_phrase += obj_1_tag
+            response_phrase += '.'
+
         else:
-    # Thought
-            response_phrase += ' ' + random.choice(response_thoughts)
+
+            response_phrase += ' '
+            response_phrase += random.choice(response_thoughts)
+            response_phrase += '.'
 
         print(response_phrase)
 
@@ -74,42 +123,6 @@ distance_natures = [
     'distant',
     'unenthusiastic',
     'tepid',
-]
-
-# - - - - Physical Interaction - - - - - - - -
-
-physical_interaction_adverbs = [
-    'playfully',
-    'gently',
-    'eagerly',
-    'aggressively',
-    'curiously',
-    'furtively',
-    'meditatively',
-    'rapturously',
-    'tenderly',
-    ', without thought,',
-    ', considerately,',
-    'unenthusiastically',
-    'audibly',
-    'weakly',
-    'impishly',
-    'slowly',
-]
-
-physical_interaction_verbs = [
-    'feigns an attack on',
-    'pursues',
-    'signs toward',
-    'pushes',
-    'shoves',
-    'pulls',
-    'guides',
-    'tickles',
-    'punches',
-    'sidles up to',
-    'nearly tramples',
-    'kisses the hand of',
 ]
 
 # - - - - - - - - - - - - - - - - -
@@ -140,34 +153,74 @@ symbolic_interaction_verbs = [
     'curses'
 ]
 
-# reaction_verbs = [
-#     'surprises',
-#     'upsets',
-#     'pleases',
-#     'distracts',
-#     'serves as punishment for',
-# ]
-
 phrase_beginnings = [
-    'It seems',
     'From what you can tell',
     'To your surprise',
     'Beyond reasonable expectations',
     'Surprisingly',
     'To the surprise of many',
-    'To no one\'s surprise',
-    'Sadly',
+    'Though it\'s difficult to see',
+    'Though it would later be forgotten',
+    'As though it were inevitable',
+]
+
+# - - - - Physical Interaction - - - - - - - -
+physical_interaction_adverbs = [
+    'tenderly',
+    'gently',
+    'eagerly',
+    'curiously',
+    'weakly',
+    'unenthusiastically',
+    'furtively',
+    'playfully',
+    'slowly',
+    'meditatively',
+    'rapturously',
+    'audibly',
+    'impishly',
+    'aggressively',
+]
+
+physical_interaction_verbs = [
+    'feigns an attack on',
+    'pursues',
+    'signs toward',
+    'pushes',
+    'shoves',
+    'pulls themselves toward',
+    'asks to dance with',
+    'extends a hand toward',
+    'expresses contempt for',
+    'expresses desire for',
+    'guides',
+    'tickles',
+    'punches',
+    'sidles up to',
+    'nearly tramples',
+    'kisses the hand of',
 ]
 
 phrase_endings = [
     'for unknown reasons',
-    'due to unforseen circumstances',
     'though unbeknownst to many',
     'for mysterious reasons',
-    'not unusual within this great mystery'
-    'through sheer circumstance',
     'driven by unknown motives',
-    'bringing a sense of closure',
+    'with hypnotic grace',
+    'with surprising speed',
+    'with deliberate determination',
+    'with great difficulty',
+    'in childish rage',
+    'in simple kindness',
+    'though poetically',
+    'though it seems like a mistake',
+    'seemingly on accident',
+    'in such a way as to seem fated',
+    'as though following a script',
+    'without a shred of irony',
+    'without hesitation',
+    'bravely',
+    'fully knowing the consequences',
 ]
 
 # - - - Response - - - - - - - - - - - - - - - -
@@ -180,7 +233,7 @@ response_beginnings = [
     'bothered',
     # NEUTRAL
     'unsettled',
-    'interested',
+    'with interest piqued',
     # POSITIVE
     'intrigued',
     'excited',
@@ -195,6 +248,15 @@ response_beginnings_addition = [
     'at the chance',
 ]
 
+physical_response_natures = [
+    'immediately',
+    'privately',
+    'deliberately',
+    ', with ease,',
+    'automatically',
+    'simply',
+]
+
 # Mapped
 response_actions = [
     'howls',
@@ -203,39 +265,43 @@ response_actions = [
     'glares',
     'stares aggressively',
     'flares their nostrils',
-    'simply nods',
+    'nods',
     'breathes heavily',
+    'lurches',
+    'rolls over',
 ]
 
+# glares [...] the
 response_directions = [
     'back at',
     'at',
     'toward',
     'towards',
     'in response to',
+    'due to the actions of',
+    'as recourse for the actions of',
     'in the direction of',
     'directly at',
-    'straight back to',
+    'straight back at',
     'near',
-    'because of'
+    'in the general vicinity of',
 ]
+
 
 # Mapped
 response_thoughts = [
     'laments',
     'curses',
-    'ignores',
+    'ignores this',
     'does not understand',
     'takes note',
-    'aknowledges',
+    'hardly aknowledges',
     'understands',
-    'comes to terms',
+    'sees no reason for this',
+    'finds coping difficult',
+    'is pleased',
+    'is oddly pleased',
+    'comes to terms with this',
 ]
 
-physical_response_endings = [
-    'immediately',
-    'privately',
-    'deliberately',
-    'with ease',
-    'automatically',
-]
+
