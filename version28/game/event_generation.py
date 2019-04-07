@@ -2,26 +2,32 @@ import random
 import math
 from termcolor import colored
 
+
 def round_nearest(x, a):
     return round(round(x / a) * a, -int(math.floor(math.log10(a))))
+
 
 def map_string(obj, quality, target_list):
     """Maps the relevant quality to a list of strings
        (whether verbs, adverbs, or adjectives), describing a situation."""
 
-    nature_list_sizes = {'inner_alignment':12,
-                       'inner_cohesion':14,
-                       'inner_separation':12,
-                       'outer_alignment':8,
-                       'outer_cohesion':12,
-                       'outer_separation':10}
+    nature_list_sizes = {
+        'inner_alignment': 12,
+        'inner_cohesion': 14,
+        'inner_separation': 12,
+        'outer_alignment': 8,
+        'outer_cohesion': 12,
+        'outer_separation': 10
+        }
 
-    quality_index = {'inner_alignment':obj.ia_index,
-                     'inner_cohesion':obj.ic_index,
-                     'inner_separation':obj.is_index,
-                     'outer_alignment':obj.oa_index,
-                     'outer_cohesion':obj.oa_index,
-                     'outer_separation':obj.oa_index}
+    quality_index = {
+        'inner_alignment': obj.ia_index,
+        'inner_cohesion': obj.ic_index,
+        'inner_separation': obj.is_index,
+        'outer_alignment': obj.oa_index,
+        'outer_cohesion': obj.oa_index,
+        'outer_separation': obj.oa_index
+        }
 
     scalar = len(target_list)/nature_list_sizes[quality]
     mapped_index = math.floor(quality_index[quality] * scalar) - 1
@@ -29,8 +35,8 @@ def map_string(obj, quality, target_list):
 
     return mapped_string
 
-
 # NEED A CHECK FOR VOWEL NAMES LOL
+
 
 # Physical event (triggered by proximity)
 def physical_event(obj_1, obj_2):
@@ -40,7 +46,8 @@ def physical_event(obj_1, obj_2):
     phrase = ""
 
     if random.choice([True, False, False, False, False]):
-        phrase += map_string(obj_1, 'outer_separation', phrase_beginnings)
+        phrase += map_string(
+                obj_1, 'outer_separation', phrase_beginnings)
         phrase += ', a '
     else:
         phrase += 'A '
@@ -48,10 +55,12 @@ def physical_event(obj_1, obj_2):
     phrase += obj_1_tag
     if random.choice([True, False, False, False, False, False]):
         phrase += ' '
-        phrase += map_string(obj_1, 'inner_separation', physical_interaction_adverbs)
+        phrase += map_string(
+                obj_1, 'inner_separation', physical_interaction_adverbs)
 
     phrase += ' '
-    phrase += map_string(obj_1, 'outer_separation', physical_interaction_verbs)
+    phrase += map_string(
+            obj_1, 'outer_separation', physical_interaction_verbs)
     phrase += ' a '
     phrase += obj_2_tag
 
@@ -69,7 +78,9 @@ def physical_event(obj_1, obj_2):
         response_phrase = ""
 
         if random.choice([True, False, False, False]):
-            response_phrase += map_string(obj_1, 'inner_separation', response_beginnings).capitalize()
+            response_phrase += map_string(
+                    obj_1, 'inner_separation', response_beginnings
+                    ).capitalize()
 
             if random.choice([True, False, False]):
                 response_phrase += ' '
@@ -184,20 +195,20 @@ physical_interaction_adverbs = [
 
 physical_interaction_verbs = [
     'feigns an attack on',
+    'nearly tramples',
     'pursues',
-    'signs toward',
     'pushes',
     'shoves',
+    'signs toward',
     'pulls themselves toward',
     'asks to dance with',
-    'extends a hand toward',
     'expresses contempt for',
     'expresses desire for',
     'guides',
     'tickles',
     'punches',
     'sidles up to',
-    'nearly tramples',
+    'extends a hand toward',
     'kisses the hand of',
 ]
 
@@ -303,5 +314,3 @@ response_thoughts = [
     'is oddly pleased',
     'comes to terms with this',
 ]
-
-

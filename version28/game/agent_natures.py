@@ -1,7 +1,7 @@
 import random
 import math
 
-    # Strength of alignment to others. (12)
+# Strength of alignment to others. (12)
 inner_alignment_nature = [
     'passive',
     'agnostic',
@@ -99,6 +99,7 @@ outer_separation_nature = [
     'repulsive',
 ]
 
+
 def round_nearest(x, a):
     return round(round(x / a) * a, -int(math.floor(math.log10(a))))
 
@@ -106,27 +107,14 @@ def round_nearest(x, a):
 def get_nature():
     # Inner Nature
 
-
-
     ia_index = random.randint(0, len(inner_alignment_nature) - 1)
     ic_index = random.randint(0, len(inner_cohesion_nature) - 1)
     is_index = random.randint(0, len(inner_separation_nature) - 1)
 
-    # ia_weight = round_nearest(ia_index/len(inner_alignment_nature), 0.05) * 2
-    # ic_weight = round_nearest(ic_index/len(inner_cohesion_nature), 0.05) * 2
-    # is_weight = round_nearest(is_index/len(inner_separation_nature), 0.05) * 2
-
     # Outer Nature
-
-
-
     oa_index = random.randint(0, len(outer_alignment_nature) - 1)
     oc_index = random.randint(0, len(outer_cohesion_nature) - 1)
     os_index = random.randint(0, len(outer_separation_nature) - 1)
-
-    oa_weight = round_nearest(oa_index/len(outer_alignment_nature), 0.05) * 2
-    oc_weight = round_nearest(oc_index/len(outer_cohesion_nature), 0.05) * 2
-    os_weight = round_nearest(os_index/len(outer_separation_nature), 0.05) * 2
 
     natures = [inner_alignment_nature[ia_index],
                inner_cohesion_nature[ic_index],
@@ -149,7 +137,8 @@ def get_nature():
                  outer_separation_nature[os_index]
                 )
 
-    return (natures,
+    return (
+            natures,
             natures_str,
             ia_index,
             oa_index,
@@ -157,7 +146,7 @@ def get_nature():
             oc_index,
             is_index,
             os_index
-            )
+           )
 
 
 print(get_nature())
