@@ -1,5 +1,5 @@
-from game import bio, resources, vector2, util, agent_natures, agent_titles,  group_generation, site_generation, event_generation
-from collections import deque
+from game import bio, resources, vector2, util, agent_natures, agent_titles, event_generation
+# from collections import deque
 from termcolor import colored, cprint
 from pyglet.gl import *
 import pyglet
@@ -12,6 +12,9 @@ fps_display = pyglet.clock.ClockDisplay()
 
 agent_index = []
 agents = []
+agent_bios = []
+agent_batches = []
+bio_index = 1
 
 # ----- Debug Options --------
 debug = True
@@ -56,12 +59,30 @@ class Agent(pyglet.sprite.Sprite):
          self.is_index,
          self.os_index) = agent_natures.get_nature()
 
-        self.ia_weight = _ALIGNMENT_WEIGHT * (util.round_nearest(self.oa_index/len(agent_natures.outer_alignment_nature), 0.05) * 2)
-        self.ic_weight = _ALIGNMENT_WEIGHT * (util.round_nearest(self.oc_index/len(agent_natures.outer_cohesion_nature), 0.05) * 2)
-        self.is_weight = _COHESION_WEIGHT * (util.round_nearest(self.os_index/len(agent_natures.outer_separation_nature), 0.05) * 2)
-        self.oa_weight = _COHESION_WEIGHT * (util.round_nearest(self.oa_index/len(agent_natures.outer_alignment_nature), 0.05) * 2)
-        self.oc_weight = _SEPARATION_WEIGHT * (util.round_nearest(self.oc_index/len(agent_natures.outer_cohesion_nature), 0.05) * 2)
-        self.os_weight = _SEPARATION_WEIGHT * (util.round_nearest(self.os_index/len(agent_natures.outer_separation_nature), 0.05) * 2)
+        self.ia_weight = _ALIGNMENT_WEIGHT * (
+                util.round_nearest(
+                        self.oa_index/len(
+                                agent_natures.outer_alignment_nature), 0.05)*2)
+        self.ic_weight = _ALIGNMENT_WEIGHT * (
+                util.round_nearest(
+                        self.oc_index/len(
+                                agent_natures.outer_cohesion_nature), 0.05)*2)
+        self.is_weight = _COHESION_WEIGHT * (
+                util.round_nearest(
+                        self.os_index/len(
+                                agent_natures.outer_separation_nature), 0.05)*2)
+        self.oa_weight = _COHESION_WEIGHT * (
+                util.round_nearest(
+                        self.oa_index/len(
+                                agent_natures.outer_alignment_nature), 0.05)*2)
+        self.oc_weight = _SEPARATION_WEIGHT * (
+                util.round_nearest(
+                        self.oc_index/len(
+                                agent_natures.outer_cohesion_nature), 0.05)*2)
+        self.os_weight = _SEPARATION_WEIGHT * (
+                util.round_nearest(
+                        self.os_index/len(
+                                agent_natures.outer_separation_nature), 0.05)*2)
 
         self.color_str = ""
 
@@ -79,11 +100,7 @@ class Agent(pyglet.sprite.Sprite):
                                                    self.x + self.v.x,
                                                    self.y + self.v.y]))
 
-
         self.history = []
-        # Initialize all timers to 0
-        # for j in range(self.total_agent_count):
-        #     self.interaction_timers[j] = 0
 
     def update(self, dt):
 
@@ -134,15 +151,17 @@ class Agent(pyglet.sprite.Sprite):
 
     def compute_alignment(self, other_agent):
         # Alignment vector will be the sum of the two
-        alignment_vector = vector2.Vector2(self.velocity_x + other_agent.velocity_x,
-                                           self.velocity_y + other_agent.velocity_y)
+        alignment_vector = vector2.Vector2(
+                self.velocity_x + other_agent.velocity_x,
+                self.velocity_y + other_agent.velocity_y)
         alignment_vector.normalise()
         return alignment_vector
 
     def compute_cohesion(self, other_agent):
         # Cohesion vector is the force of grouping.
-        cohesion_vector = vector2.Vector2(self.x + other_agent.x,
-                                          self.y + other_agent.y)
+        cohesion_vector = vector2.Vector2(
+                self.x + other_agent.x,
+                self.y + other_agent.y)
         cohesion_vector.x /= 2
         cohesion_vector.y /= 2
         cohesion_vector.normalize()
@@ -150,8 +169,9 @@ class Agent(pyglet.sprite.Sprite):
 
     def compute_separation(self, other_agent):
         # Separation is repelling force
-        separation_vector = vector2.Vector2(other_agent.x - self.x,
-                                            other_agent.y - self.y)
+        separation_vector = vector2.Vector2(
+                other_agent.x - self.x,
+                other_agent.y - self.y)
 
         separation_vector *= -1
         return separation_vector
@@ -159,30 +179,35 @@ class Agent(pyglet.sprite.Sprite):
     # Detection / Interaction
     def neighbor_lines(self, other_agent):
         actual_distance = util.distance(self.position, other_agent.position)
-        glColor3f((4/actual_distance)*3, (4/actual_distance)
-                  * 3, (4/actual_distance)*3)
+        glColor3f(
+                (4/actual_distance) * 3,
+                (4/actual_distance) * 3,
+                (4/actual_distance) * 3)
 
         if actual_distance <= _INTERACTION_RADIUS:
-            self.neighbor_vlist = pyglet.graphics.vertex_list(2, ('v2f', [
-                self.x,
-                self.y,
-                other_agent.x,
-                other_agent.y]))
+            self.neighbor_vlist = pyglet.graphics.vertex_list(
+                    2, ('v2f', [
+                            self.x,
+                            self.y,
+                            other_agent.x,
+                            other_agent.y]))
             self.neighbor_vlist.draw(GL_LINES)
 
     def interacts_with(self, other_agent):
         actual_distance = util.distance(self.position, other_agent.position)
 
         if actual_distance <= _ALGINMENT_RADIUS:
-            self.v += (self.compute_alignment(other_agent) * (self.ia_weight + other_agent.oa_weight))
+            self.v += (
+                    self.compute_alignment(other_agent) * (
+                            self.ia_weight + other_agent.oa_weight))
         if actual_distance <= _COHESION_RADIUS:
-            self.v += (self.compute_cohesion(other_agent) * (self.ic_weight + other_agent.oc_weight))
+            self.v += (
+                    self.compute_cohesion(other_agent) * (
+                            self.ic_weight + other_agent.oc_weight))
         if actual_distance <= _SEPARATION_RADIUS:
-            self.v += (self.compute_separation(other_agent) * (self.is_weight + other_agent.is_weight))
-
-        # DEFUNCT EVENT MOD.
-        # if actual_distance <= _INTERACTION_RADIUS:
-            # if self.interaction_timers[other_agent.id] > _INTERACTION_INTERVAL:
+            self.v += (
+                    self.compute_separation(other_agent) * (
+                            self.is_weight + other_agent.is_weight))
 
 
 class Narrative(object):
@@ -193,42 +218,55 @@ class Narrative(object):
 
     def update(self, dt):
         self.duration += 1
-        if self.duration%100 == 0:
+        if self.duration % 100 == 0:
             print(colored((
-                           '-------- ' +
-                           'Time enters the ' + str(int(self.duration/100)) + 'th cycle.' +
-                           ' --------'),
-                           color=None, on_color=None, attrs=['bold'])
+                    '-------- ' +
+                    'Time enters the ' + str(int(self.duration/100)) + 'th cycle.' +
+                    ' --------'),
+                    color=None, on_color=None, attrs=['bold'])
                   )
 
-    def new_event(self):
-        pass
+    # def new_event(self):
+    #     pass
 
 
 class Bio_Screen(object):
     """Manages the display of the biographies created with the 'bio' module"""
 
     def __init__(self):
-        pass
 
+        self.created_tag = pyglet.text.Label(
+                'Hello, world',
+                font_name='Times New Roman',
+                font_size=36,
+                color=(255, 255, 255, 255),
+                x=window_width//2,
+                y=window_height//2,
+                anchor_x='center', anchor_y='center')
+
+    def update(self, dt, index):
+
+        if index != (len(list)-1):
+            index += 1
+            print('index now ', index)
+        elif index == (len(list)-1):
+            index = 0
+            print('index now ', index)
+
+        return index
 
     def draw(self):
-        created_tag = pyglet.text.Label('Hello, world',
-                    font_name='Times New Roman',
-                    font_size=36,
-                    color=((255,255,255,255)),
-                    x=window_width//2,
-                    y=window_height//2,
-                    anchor_x='center', anchor_y='center')
-
-
-        created_tag.draw()
+        pass
+        # self.test_tag.draw()
 
 
 class Application():
-    """Main application run class. """
+    """
+    Initializes and iterates through agents.
+    """
 
     def setup(self):
+
         """Initialize agents"""
         for i in range(agent_count):
             random.seed(i)
@@ -265,11 +303,16 @@ class Application():
             agents.append(new_agent)
             agent_index.append("")
 
+            new_agent_batch = pyglet.graphics.Batch()
+            agent_batches.append(new_agent_batch)
+
+            new_agent_bio = bio.Biography(new_agent, new_agent_batch, window_width, window_height)
+            agent_bios.append(new_agent_bio)
+
             print(
                 "Agent " + str(i) + " is a " +
                 colored(agents[i].title, color=None, on_color=agents[i].color_str) +
                 " who is seen as " + agents[i].nature_str)
-
 
     def update(self, dt):
         # Go through each agent's update loop
@@ -283,7 +326,6 @@ class Application():
                 obj_2 = agents[j]
                 obj_1.interacts_with(obj_2)
                 obj_2.interacts_with(obj_1)
-
 
 
 def main():
@@ -312,7 +354,6 @@ def main():
         bio_window = pyglet.window.Window(
             fullscreen=True, screen=screen_2, vsync=False)
 
-
     @implicit_window.event
     def on_draw():
         glClear(GL_COLOR_BUFFER_BIT)
@@ -326,12 +367,12 @@ def main():
                 obj_2 = agents[j]
                 obj_1.neighbor_lines(obj_2)
 
-                ### EVENT MODULE
+                # EVENT MODULE
                 actual_distance = util.distance(obj_1.position, obj_2.position)
                 if actual_distance < _INTERACTION_RADIUS:
-                    if obj_1.interaction_timer and obj_2.interaction_timer > _INTERACTION_INTERVAL:
-                        # Maybe call some sort of function in each that deals with how their behavior
-                        # changes after an event?
+                    if (obj_1.interaction_timer and
+                            obj_2.interaction_timer > _INTERACTION_INTERVAL):
+
                         obj_1.interaction_timer = 0
                         obj_2.interaction_timer = 0
                         event_generation.physical_event(obj_1, obj_2)
@@ -340,14 +381,16 @@ def main():
             glColor3f(255, 0, 0)
             agent.vlist.draw(GL_LINES)  # Draw velocity vector
 
-
     @bio_window.event
     def on_draw():
         glClear(GL_COLOR_BUFFER_BIT)
         bio_window.clear()
         bio_screen.draw()
 
+        agent_bios[bio_index].draw()
+
     pyglet.clock.schedule_interval(app.update, 1 / 60.0)
+    # pyglet.clock.schedule_interval(cycle_bios, 2, bio_index)
     pyglet.clock.schedule_interval(narrative.update, 1 / 60.0)
 
     pyglet.app.run()

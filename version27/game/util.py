@@ -1,5 +1,15 @@
 import math
 
+def cycle_list(list, index):
+    if index != (len(list)-1):
+        index += 1
+        print('index now ', index)
+    elif index == (len(list)-1):
+        index = 0
+        print('index now ', index)
+
+    return index
+
 def round_nearest(x, a):
     return round(round(x / a) * a, -int(math.floor(math.log10(a))))
 
