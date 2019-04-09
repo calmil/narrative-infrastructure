@@ -124,17 +124,17 @@ def get_nature():
                outer_separation_nature[os_index]]
 
     natures_str = str(
-                 inner_alignment_nature[ia_index] +
-                 ", " +
-                 inner_cohesion_nature[ic_index] +
-                 ", " +
-                 inner_separation_nature[is_index] +
-                 ", " +
-                 outer_alignment_nature[oa_index] +
-                 ", " +
-                 outer_cohesion_nature[oc_index] +
-                 ", & " +
-                 outer_separation_nature[os_index]
+                 inner_alignment_nature[ia_index]
+                 + ", "
+                 + inner_cohesion_nature[ic_index]
+                 + ", "
+                 + inner_separation_nature[is_index]
+                 + ", "
+                 + outer_alignment_nature[oa_index]
+                 + ", "
+                 + outer_cohesion_nature[oc_index]
+                 + ", & "
+                 + outer_separation_nature[os_index]
                 )
 
     return (

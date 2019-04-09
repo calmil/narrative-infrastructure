@@ -31,6 +31,8 @@ def map_string(obj, quality, target_list):
 
     scalar = len(target_list)/nature_list_sizes[quality]
     mapped_index = math.floor(quality_index[quality] * scalar) - 1
+    # if mapped_index > 1 or mapped_index < (len(target_list)-2):
+    #     mapped_index += random.choice([-1,1])
     mapped_string = target_list[mapped_index]
 
     return mapped_string
@@ -69,8 +71,8 @@ def physical_event(obj_1, obj_2):
         phrase += (random.choice(phrase_endings))
     phrase += '.'
 
-    obj_1.history.append(phrase)
-    print(phrase)
+    # obj_1.history.append(phrase)
+
 
     # - - - - - - Response Phrase - - - - - -
 
@@ -111,41 +113,26 @@ def physical_event(obj_1, obj_2):
             response_phrase += random.choice(response_thoughts)
             response_phrase += '.'
 
-        print(response_phrase)
+        return phrase + '\n' + response_phrase
 
+    return phrase
 
-duration_natures = [
-    'brief',
-    'short-lived',
-    'quick',
-    'unintentional',
-]
-
-distance_natures = [
-    'loving',
-    'intimate',
-    'tender',
-    'sincere',
-    'interpersonal',
-    'close-knit',
-    'professional',
-    'impersonal',
-    'terse',
-    'distant',
-    'unenthusiastic',
-    'tepid',
-]
+# Inner_Alignment: Strength of alignment to others.
+# Inner_Cohesion: Strength of allure toward others.
+# Inner_Separation: Strength of repulsion from others.
+# Outer_Alignment: Incentive for others to align with
+# Outer_Cohesion: Incentive to come towards
+# Outer_Separation: Incentive to be repelled
 
 # - - - - - - - - - - - - - - - - -
 
 # Mapped
 symbolic_interaction_adverbs = [
-    'audibly',
     'weakly',
+    'unenthusiastically',
     'impishly',
     'slowly',
-    'unenthusiastically',
-    'unenthusiastically',
+    'audibly',
     'enthusiastically',
     'half-heartedly',
 ]
@@ -177,29 +164,31 @@ phrase_beginnings = [
 
 # - - - - Physical Interaction - - - - - - - -
 physical_interaction_adverbs = [
+    'unenthusiastically',
     'tenderly',
-    'gently',
-    'eagerly',
+    'meditatively',
     'curiously',
     'weakly',
-    'unenthusiastically',
+    'gently',
+    'eagerly',
     'furtively',
-    'playfully',
     'slowly',
-    'meditatively',
-    'rapturously',
+    'playfully',
     'audibly',
-    'impishly',
+    'rapturously',
     'aggressively',
+    'impishly',
 ]
 
 physical_interaction_verbs = [
+    'signs toward',
+    'ignores',
+    'passes by',
     'feigns an attack on',
     'nearly tramples',
     'pursues',
     'pushes',
     'shoves',
-    'signs toward',
     'pulls themselves toward',
     'asks to dance with',
     'expresses contempt for',
@@ -213,25 +202,25 @@ physical_interaction_verbs = [
 ]
 
 phrase_endings = [
-    'for unknown reasons',
     'though unbeknownst to many',
+    'for unknown reasons',
     'for mysterious reasons',
     'driven by unknown motives',
     'with hypnotic grace',
     'with surprising speed',
+    'in simple kindness',
     'with deliberate determination',
     'with great difficulty',
-    'in childish rage',
-    'in simple kindness',
     'though poetically',
     'though it seems like a mistake',
     'seemingly on accident',
     'in such a way as to seem fated',
+    'fully knowing the consequences',
     'as though following a script',
     'without a shred of irony',
     'without hesitation',
     'bravely',
-    'fully knowing the consequences',
+    'in childish rage',
 ]
 
 # - - - Response - - - - - - - - - - - - - - - -
@@ -314,3 +303,4 @@ response_thoughts = [
     'is oddly pleased',
     'comes to terms with this',
 ]
+

@@ -4,6 +4,7 @@ from termcolor import colored, cprint
 from pyglet.gl import *
 import pyglet
 import random
+import math
 
 # ----- Init Sequence -------
 agent_batch = pyglet.graphics.Batch()
@@ -117,16 +118,20 @@ class Agent(pyglet.sprite.Sprite):
             self.v.y *= 0.90
 
         # Calculate wiggle.
-        self.random_offset = vector2.Vector2(random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2),
-                                             random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2))
+        self.random_offset = vector2.Vector2(
+                random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2),
+                random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2)
+                )
         self.v += self.random_offset
 
         # Draw momentum vector
-        self.vlist = pyglet.graphics.vertex_list(2, ('v2f', [self.x,
-                                                             self.y,
-                                                             self.x + self.v.x,
-                                                             self.y + self.v.y])
-                                                 )
+        self.vlist = pyglet.graphics.vertex_list(
+                2, ('v2f', [
+                        self.x,
+                        self.y,
+                        self.x + self.v.x,
+                        self.y + self.v.y
+                        ]))
 
         # Actual movement.
         self.x += self.v.x * dt
@@ -266,7 +271,7 @@ class Application():
 
         """Initialize agents"""
         for i in range(agent_count):
-            random.seed(i)
+            # random.seed(i)
             rand_color_choice = random.randint(0,5)
             agent_color_id=[
                 resources.red,
@@ -277,6 +282,16 @@ class Application():
                 resources.cyan,
                 resources.magenta
                 ]
+
+            agent_rgb=[
+                    [255,0,0], # red
+                    [255,12,10], # yellow
+                    [0,0,255], # green
+                    [0,255,0], # blue
+                    [0,255,255], # cyan
+                    [255,0,255] # magenta
+            ]
+
             agent_color=[
                 "on_red",
                 # "on_white",
@@ -295,6 +310,7 @@ class Application():
                 )
 
             new_agent.color_str=agent_color[rand_color_choice]
+            new_agent.rgb_code=agent_rgb[rand_color_choice]
 
             new_agent.id = i
             agents.append(new_agent)
@@ -307,15 +323,18 @@ class Application():
             agent_bios.append(new_agent_bio)
 
             print(
-                "Agent " + str(i) + " is a " +
-                colored(agents[i].title, color=None, on_color=agents[i].color_str) +
-                " who is seen as " + agents[i].nature_str)
+                "Agent " + str(i)
+                + " is a "
+                + colored(agents[i].title, color=None, on_color=agents[i].color_str)
+                + " who is seen as "
+                + agents[i].nature_str
+                )
 
     def update(self, dt):
         # Go through each agent's update loop
         for agent in agents:
             agent.update(dt)
-
+            
         # Iterate through all object pairs to check for detection
         for i in range(len(agents)):
             for j in range(i + 1, len(agents)):
@@ -323,6 +342,8 @@ class Application():
                 obj_2 = agents[j]
                 obj_1.interacts_with(obj_2)
                 obj_2.interacts_with(obj_1)
+
+            agent_bios[i].update(dt)            
 
         # def cycle_list(length):
 
@@ -344,6 +365,9 @@ def main():
     bio_screen = Bio_Screen()
     app = Application()
     app.setup()
+
+    test = 0
+    increase = True
 
     display = pyglet.window.get_platform().get_default_display()
 
@@ -382,7 +406,9 @@ def main():
 
                         obj_1.interaction_timer = 0
                         obj_2.interaction_timer = 0
-                        event_generation.physical_event(obj_1, obj_2)
+                        print(event_generation.physical_event(obj_1, obj_2))
+                        # AD D  HISTORY
+                        agent_bios[obj_1.id].update_history(obj_1.history)
 
         for agent in agents:
             glColor3f(255, 0, 0)
@@ -399,6 +425,7 @@ def main():
 
 
     pyglet.clock.schedule_interval(app.update, 1 / 60.0)
+    
     pyglet.clock.schedule_interval(narrative.update, 1 / 60.0)
 
     pyglet.app.run()
