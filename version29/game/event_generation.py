@@ -2,41 +2,15 @@ import random
 import math
 from termcolor import colored
 
+# Inner_Alignment: Strength of alignment to others.
+# Inner_Cohesion: Strength of allure toward others.
+# Inner_Separation: Strength of repulsion from others.
+# Outer_Alignment: Incentive for others to align with
+# Outer_Cohesion: Incentive to come towards
+# Outer_Separation: Incentive to be repelled
 
 def round_nearest(x, a):
     return round(round(x / a) * a, -int(math.floor(math.log10(a))))
-
-
-# Make it so it picks a random string from a relevant list
-# def map_string(obj, quality, target_list):
-#     """Maps the relevant quality to a list of strings
-#        (whether verbs, adverbs, or adjectives), describing a situation."""
-
-#     nature_list_sizes = {
-#         'inner_alignment': 12,
-#         'inner_cohesion': 14,
-#         'inner_separation': 12,
-#         'outer_alignment': 8,
-#         'outer_cohesion': 12,
-#         'outer_separation': 10
-#         }
-
-#     quality_index = {
-#         'inner_alignment': obj.ia_index,
-#         'inner_cohesion': obj.ic_index,
-#         'inner_separation': obj.is_index,
-#         'outer_alignment': obj.oa_index,
-#         'outer_cohesion': obj.oa_index,
-#         'outer_separation': obj.oa_index
-#         }
-
-#     scalar = len(target_list)/nature_list_sizes[quality]
-#     mapped_index = math.floor(quality_index[quality] * scalar) - 1
-#     # if mapped_index > 1 or mapped_index < (len(target_list)-2):
-#     #     mapped_index += random.choice([-1,1])
-#     mapped_string = target_list[mapped_index]
-
-#     return mapped_string
 
 
 def map_string(obj, target_list):
@@ -64,7 +38,7 @@ def map_string(obj, target_list):
     
     return random.choice(target_list[index])
 
-# NEED A CHECK FOR VOWEL NAMES LOL
+
 def vowel_check(obj):
     if obj.title[0] in {"a", "e", "i", "o", "u"}:
         return 'an'
@@ -79,32 +53,33 @@ def physical_event(obj_1, obj_2):
 
     phrase = ""
 
-    if random.choice([True, False, False, False, False]):
+    if random.choice([True, False, False, False, False, False, False]):
         phrase += map_string(obj_1, phrase_beginnings)
         phrase += ', '
         phrase += vowel_check(obj_1)
     else:
         phrase += vowel_check(obj_1).capitalize()
-
+ 
     phrase += ' '
     phrase += obj_1_tag
     if random.choice([True, False, False, False, False, False]):
         phrase += ' '
-        phrase += map_string(obj_1, physical_interaction_adverbs)
+        phrase += map_string(obj_1, adverbs)
 
-    phrase += ' '
-    phrase += map_string(obj_1, physical_interaction_verbs)
-    phrase += ' '
-    phrase += vowel_check(obj_2)
-    phrase += ' '
-    phrase += obj_2_tag
+    # CLEAN THEM ALL UP SO THEY LOOK LIKE THIS
+    phrase += (
+            ' ' 
+            + map_string(obj_1, physical_interaction_verbs)
+            + ' '
+            + vowel_check(obj_2)
+            + ' '
+            + obj_2_tag
+            )
 
-    if random.choice([True, False, False, False]):
+    if random.choice([True, False, False, False, False, False, False]):
         phrase += ', '
         phrase += map_string(obj_1, phrase_endings)
     phrase += '.'
-
-
 
     # - - - - - - Response Phrase - - - - - -
 
@@ -114,7 +89,7 @@ def physical_event(obj_1, obj_2):
         if random.choice([True, False, False, False]):
             response_phrase += map_string(obj_1, response_beginnings).capitalize()
 
-            if random.choice([True, False, False]):
+            if random.choice([True, False, False, False, False, False, False]):
                 response_phrase += ' '
                 response_phrase += map_string(obj_2, response_beginnings_addition)
 
@@ -129,7 +104,8 @@ def physical_event(obj_1, obj_2):
             if random.choice([True, False]):
                 response_phrase += ' '
                 response_phrase += map_string(obj_2, physical_response_natures)
-
+            
+            # Add response phrase
             response_phrase += (
                 ' ' + map_string(obj_2, response_actions) +
                 ' ' + map_string(obj_2, response_directions) + ' the '
@@ -147,51 +123,121 @@ def physical_event(obj_1, obj_2):
 
     return phrase
 
-# Inner_Alignment: Strength of alignment to others.
-# Inner_Cohesion: Strength of allure toward others.
-# Inner_Separation: Strength of repulsion from others.
-# Outer_Alignment: Incentive for others to align with
-# Outer_Cohesion: Incentive to come towards
-# Outer_Separation: Incentive to be repelled
+def symbolic_interaction(obj_1, obj_2):
+    obj_1_tag = colored(obj_1.title, color=None, on_color=obj_1.color_str)
+    obj_2_tag = colored(obj_2.title, color=None, on_color=obj_2.color_str)
+
+
+    phrase = ''
+
+    phrase += (
+            vowel_check(obj_1)
+            + ' '
+            + obj_1_tag
+            + ' '
+            + map_string(obj_1, symbolic_interaction_verbs)
+            + ' '
+            + map_string(obj_1, symbolic_interaction_subjects)
+            + ' of '
+            )
+    
+    if random.choice([True, False]):
+        phrase += (
+                vowel_check(obj_2)
+                + ' '
+                + obj_2_tag
+                )
+    else:
+        phrase += map_string(obj_1, symbolic_interaction_nouns)
+
+    print(phrase)
+
 
 # - - - - - - - - - - - - - - - - -
-
-# Inner Alignment
-symbolic_interaction_adverbs = [
-    'ia',
-    [
-        'weakly',
-        'unenthusiastically',
-        'impishly',
-    ],
-    [
-        'weakly',
-        'unenthusiastically',
-        'impishly',
-    ],
-    [
-        'slowly',
-        'agonizingly',
-        'audibly',
-        'enthusiastically',
-        'half-heartedly',
-    ]
-]
 
 # Inner Cohesion
 symbolic_interaction_verbs = [
     'ic',
     [
-        'suppresses the thought of',
-        'curses'
+        'suppresses',
+        'curses',
+        'struggles with',
+        'cannot cope with',
+        'is haunted by',
+        'mourns',
+        'seeks relief from',
+        'critiques',
     ],
     [
         'thinks about',
-        'remembers',
+        'recalls',
+        'wonders about',
         'comes to a conclusion about',
+        'ponders',
+        'relives',
+        'articulates',
+        'pantomimes',
+        'observes',
     ],
     [
-        'wants to see',
+        'grows to understand',
+        'is illuminated by',
+        'is motivated by',
+        'misses',
+        'sees new meaning in',
+        'relishes',
+        'adores',
+        'expresses fondness for',
+        'desires',
+        'ascribes meaning to',
+        'finds inspiration in',
+        'sees purpose in',
+        'paints',
+        'shares',
+    ]
+]
+
+symbolic_interaction_subjects = [
+    'random',
+    [
+        'the idea',
+        'the memory',
+        'the history',
+        'what they remember',
+        'a distant memory',
+        'the appearance',
+        'the movements',
+        'the nature',
+        'the feeling',
+        'the vernacular',
+        'the writings',
+        'the songs',
+        'the music',
+        'a joke',
+        'the journey',
+        'the journeys',
+        'their love',
+        'the attire',
+        'the language',
+        'an image',
+        'a memory',
+        'what is known',
+        'what is unknown',
+        'what can be seen',
+        'what is apparent',
+        'what is left'
+    ]
+]
+
+symbolic_interaction_nouns = [
+    'random',
+    [
+        'someone they cannot name',
+        'a long-lost figure',
+        'an apparent friend',
+        'an unknowable figure',
+        'someone unfamiliar',
+        'something shrouded in great distance',
     ]
 ]
 
@@ -207,12 +253,15 @@ phrase_beginnings = [
         'Though it\'s difficult to see',
         'Though it would later be forgotten',
         'As though it were inevitable',
-        'Steeped in irony,'
+        'Steeped in irony',
+        'From a certain perspective',
+        'It might seem that',
+
     ]
 ]
 
 # - - - - Physical Interaction - - - - - - - -
-physical_interaction_adverbs = [
+adverbs = [
         'random',
     [
         'abnormally',
@@ -220,9 +269,7 @@ physical_interaction_adverbs = [
         'accidentally',
         'actually',
         'adventurously',
-        'afterwards',
         'almost',
-        'always',
         'annually',
         'anxiously',
         'arrogantly',
@@ -578,25 +625,32 @@ physical_interaction_adverbs = [
 physical_interaction_verbs = [
     'oc',
     [
-        'signs toward',
         'ignores',
         'expresses contempt for',
-        'feigns an attack on',
         'nearly tramples',
         'pursues',
         'pushes',
         'punches',
         'shoves',
+        'tickles',
     ],
     [
+        'signs toward',
         'passes by',
-        'pulls themselves toward',
+        'moves themselves toward',
         'guides',
-        'tickles',
+        'says something unintelligible to',
+        'asks a favor of',
         'sidles up to',
         'feigns interest in',
     ],
     [
+        'grows familiar with',
+        'tries to hug',
+        'compliments',
+        'tries to entertain',
+        'dances for',
+        'wants to learn the language of'
         'expresses desire for',
         'asks to dance with',
         'extends a hand toward',
@@ -639,12 +693,18 @@ response_beginnings = [
             'astonished',
             'terrified',
             'angered',
-            'bothered'
+            'bothered',
+            'enraged',
+            'now corrupted',
         ],
         # NEUTRAL
         [
             'unsettled',
-            'with interest piqued'
+            'motivated',
+            'with interest piqued',
+            'appropriately',
+            'uncertain',
+            'with little self-confidence',
         ],
         # POSITIVE
         [
@@ -663,6 +723,7 @@ response_beginnings_addition = [
         'at even the mere possibility',
         'by the implications',
         'at the chance',
+        'because of this',
     ]
 ]
 
@@ -675,7 +736,8 @@ physical_response_natures = [
         'deliberately',
         ', with ease,',
         'automatically',
-        'simply'
+        'simply',
+        'plainly',
     ]
 ]
 
@@ -684,8 +746,16 @@ response_actions = [
     'is',
     [
         'rolls over',
+        'smiles',
+        'laughs',
+        'extends a hand',
+        'gives thanks'
     ],
     [
+        'exhales',
+        'glances',
+        'stares',
+        'disregards',
         'nods',
         'breathes heavily',
     ],
@@ -729,8 +799,12 @@ response_thoughts = [
         'comes to terms with this',
         'is pleased',
         'is oddly pleased',
+        'enjoys a private laugh',
+        'finds peace regardless',
+        'grows to understand',
     ],
     [
+        'finds no reason to change', 
         'does not understand',
         'takes note',
         'hardly aknowledges',
@@ -742,6 +816,8 @@ response_thoughts = [
         'laments',
         'finds coping difficult',
         'curses',
+        'privately rages',
+        'loses faith',
     ]
 
 ]
