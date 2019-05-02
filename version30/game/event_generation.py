@@ -27,7 +27,7 @@ def map_string(obj_1, nature, obj_2, target_nature):
 
     if target_nature == 'ia':
         target_quality = obj_2.ia_weight
-        agent_bios[0]
+        # Change the corr. bio string:
     elif target_nature == 'oa':
         target_quality = obj_2.oa_weight
     elif target_nature == 'ic':
@@ -109,7 +109,6 @@ def physical_event(obj_1, obj_2):
     if random.choice([True, False, False, False, False, False]):
         phrase += ' ' + map_string(obj_1, adverbs)
 
-    # CLEAN THEM ALL UP SO THEY LOOK LIKE THIS
     phrase += (
             ' '
             + map_string(obj_1, physical_interaction_verbs)
@@ -126,7 +125,6 @@ def physical_event(obj_1, obj_2):
 
 
     # ------------ Response Phrase ------------
-
     if random.choice([True, False, False]):
         response_phrase = ""
 
@@ -178,7 +176,7 @@ def symbolic_interaction(obj_1, obj_2):
     phrase = ''
 
     phrase += (
-            vowel_check(obj_1.title)
+            vowel_check(obj_1.title).capitalize()
             + ' '
             + obj_1_tag
             + ' '
@@ -211,6 +209,10 @@ def retire(obj):
         )
     )
 
+
+# ---------------------------------------------
+# ------------- WORD LISTS --------------------
+# ---------------------------------------------
 
 # ------------- Misc Lists --------------------
 objects = [

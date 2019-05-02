@@ -32,7 +32,7 @@ class Biography():
                 width=200,
                 anchor_x='left', anchor_y='center',
                 batch=batch
-                )
+            )
 
         self.nature_tag = pyglet.text.Label(
                 str(
@@ -52,26 +52,27 @@ class Biography():
                 width=200,
                 anchor_x='left', anchor_y='center',
                 batch=batch
-                )
+            )
 
-        self.weights_tag = pyglet.text.Label((
+        self.weights_tag = pyglet.text.Label(
+            (
                 str(obj.ia_weight) + '\n' +
                 str(obj.oa_weight) + '\n' +
                 str(obj.ic_weight) + '\n' +
                 str(obj.oc_weight) + '\n' +
                 str(obj.is_weight) + '\n' +
                 str(obj.os_weight) + '\n'
-        ),
-        multiline=True,
-        font_name='Helvetica',
-        font_size=12,
-        color=(255, 255, 255, 255),
-        x=150,
-        y=600//2,
-        width=200,
-        anchor_x='left', anchor_y='center',
-        batch=batch
-        )
+            ),
+                multiline=True,
+                font_name='Helvetica',
+                font_size=12,
+                color=(255, 255, 255, 255),
+                x=150,
+                y=600//2,
+                width=200,
+                anchor_x='left', anchor_y='center',
+                batch=batch
+            )
 
         self.history_tag = pyglet.text.Label(
                 str(' '),
@@ -84,9 +85,7 @@ class Biography():
                 width=400,
                 anchor_x='left', anchor_y='center',
                 batch=self.batch
-                )
-
-        # self.batch.add(resources.magenta)
+            )
 
         self.batch.add(2, pyglet.gl.GL_LINES, None,
                 ('v2i', (0, window_height - 50, window_width, window_height - 50)),
