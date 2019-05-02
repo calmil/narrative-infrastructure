@@ -4,10 +4,12 @@ from game import bio, resources, vector2, util, agent_natures, agent_titles, eve
 # from collections import deque
 from termcolor import colored
 from pyglet.gl import *
+import colorama
 import pyglet
 import random
 import os
 import sys
+import time
 # import math
 
 # ----- Init Sequence -------
@@ -142,7 +144,8 @@ class Agent(pyglet.sprite.Sprite):
                         self.y,
                         self.x + self.v.x,
                         self.y + self.v.y
-                        ]))
+                    ])
+                )
 
         # Actual movement.
         self.x += self.v.x * dt
@@ -239,10 +242,13 @@ class Narrative(object):
 
     def update(self, dt):
         self.duration += 1
+
+        # Counter
         if self.duration % cycle_interval == 0:
             self.cycle += 1
             narrator.counter(self.cycle)
 
+        # Symbolic Gestures
         if self.duration % (cycle_interval*symbolic_cycle_interval) == 0:
             event_generation.symbolic_interaction(random.choice(agents),random.choice(agents))
 
@@ -333,19 +339,19 @@ class Application():
             self.add_agent(i)
 
             print(
-                "Agent " + str(i)
-                + " is a "
-                + colored(agents[i].title, color=None, on_color=agents[i].color_str)
+                # "Agent " + str(i)
+                # + " is a "
+                colored(agents[i].title, color=None, on_color=agents[i].color_str)
                 + " who is seen as "
-                + agents[i].nature_str
-                + " with weights of"
-                + str(agents[i].ia_weight) + " "
-                + str(agents[i].ic_weight) + " "
-                + str(agents[i].is_weight) + " "
-                + str(agents[i].oa_weight) + " "
-                + str(agents[i].oc_weight) + " "
-                + str(agents[i].os_weight) + " "
-                )
+                + agents[i].nature_str)
+                # + " with weights of"
+                # + str(agents[i].ia_weight) + " "
+                # + str(agents[i].ic_weight) + " "
+                # + str(agents[i].is_weight) + " "
+                # + str(agents[i].oa_weight) + " "
+                # + str(agents[i].oc_weight) + " "
+                # + str(agents[i].os_weight) + " "
+
 
     def retire(self, retiree):
         
@@ -389,6 +395,9 @@ class Application():
             if self.duration == 1000:
                     python = sys.executable
                     os.execl(python, python, * sys.argv)
+
+        # if self.duration == 500:
+        #     time.sleep(2)
 
         
 
@@ -447,11 +456,10 @@ def main():
                                 batch=agent_batch
                                 )
 
-                        # AD D  HISTORY
+                        # ADD HISTORY
                         agent_bios[obj_1.id].update_history(obj_1.history)
 
-        for agent in agents:
-            
+        for agent in agents:     
             glColor3f(agent.rgb_code[0], agent.rgb_code[1], agent.rgb_code[2])
             agent.vlist.draw(GL_LINES)  # Draw velocity vector
 
