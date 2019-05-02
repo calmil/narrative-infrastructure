@@ -105,37 +105,36 @@ def round_nearest(x, a):
 
 
 def get_nature():
-    # Inner Nature
 
     ia_index = random.randint(0, len(inner_alignment_nature) - 1)
-    ic_index = random.randint(0, len(inner_cohesion_nature) - 1)
-    is_index = random.randint(0, len(inner_separation_nature) - 1)
-
-    # Outer Nature
     oa_index = random.randint(0, len(outer_alignment_nature) - 1)
+
+    ic_index = random.randint(0, len(inner_cohesion_nature) - 1)
     oc_index = random.randint(0, len(outer_cohesion_nature) - 1)
+    
+    is_index = random.randint(0, len(inner_separation_nature) - 1)
     os_index = random.randint(0, len(outer_separation_nature) - 1)
 
     natures = [inner_alignment_nature[ia_index],
-               inner_cohesion_nature[ic_index],
-               inner_separation_nature[is_index],
                outer_alignment_nature[oa_index],
+               inner_cohesion_nature[ic_index],
                outer_cohesion_nature[oc_index],
+               inner_separation_nature[is_index],
                outer_separation_nature[os_index]]
 
     natures_str = str(
-                 inner_alignment_nature[ia_index]
-                 + ", "
-                 + inner_cohesion_nature[ic_index]
-                 + ", "
-                 + inner_separation_nature[is_index]
-                 + ", "
-                 + outer_alignment_nature[oa_index]
-                 + ", "
-                 + outer_cohesion_nature[oc_index]
-                 + ", & "
-                 + outer_separation_nature[os_index]
-                )
+            inner_alignment_nature[ia_index]
+            + ", "
+            + outer_alignment_nature[oa_index]
+            + ", "
+            + inner_cohesion_nature[ic_index]
+            + ", "
+            + outer_cohesion_nature[oc_index]
+            + ", "
+            + inner_separation_nature[is_index]
+            + ", & "
+            + outer_separation_nature[os_index]
+        )
 
     return (
             natures,

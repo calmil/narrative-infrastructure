@@ -6,13 +6,14 @@ def royal_title():
         'chief',
         'king',
         'earl',
+        'queen',
         'baron',
-        'viscount',
         'prince',
         'crown prince',
         'duke',
         'archduke',
         'vice duke',
+        'princess',
         'duchess',
         'despot',
         'count',
@@ -20,7 +21,6 @@ def royal_title():
         'knight',
         'nobile',
         'elder',
-        'edler',
         'gentleman',
     ]
 
@@ -178,9 +178,9 @@ def get_title():
     key = random.randint(0, 5)
 
     # Add title prefix
-    if random.choice([True, False, False, False, False]):
-        title += (title_rankings[random.randint(0, len(title_rankings) - 1)])
-        title += " "
+    # if random.choice([True, False, False, False, False]):
+    #     title += (title_rankings[random.randint(0, len(title_rankings) - 1)])
+    #     title += " "
 
     # Generate title
     if key == 0:
