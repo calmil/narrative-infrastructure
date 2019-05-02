@@ -54,6 +54,25 @@ class Biography():
                 batch=batch
                 )
 
+        self.weights_tag = pyglet.text.Label((
+                str(obj.ia_weight) + '\n' +
+                str(obj.oa_weight) + '\n' +
+                str(obj.ic_weight) + '\n' +
+                str(obj.oc_weight) + '\n' +
+                str(obj.is_weight) + '\n' +
+                str(obj.os_weight) + '\n'
+        ),
+        multiline=True,
+        font_name='Helvetica',
+        font_size=12,
+        color=(255, 255, 255, 255),
+        x=150,
+        y=600//2,
+        width=200,
+        anchor_x='left', anchor_y='center',
+        batch=batch
+        )
+
         self.history_tag = pyglet.text.Label(
                 str(' '),
                 multiline=True,
@@ -84,9 +103,7 @@ class Biography():
         self.history_tag.text = str(history)
 
     def draw(self):
+        self.weights_tag.draw()
         self.nature_tag.draw()
         self.title_tag.draw()
         # self.history_tag.draw()
-
-    # return created_tag
-
