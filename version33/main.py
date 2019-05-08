@@ -492,11 +492,9 @@ class Application():
         # ------------ System Restart ------------------
         # if debug == False:
         if self.duration % (cycle_interval*system_restart_interval) == 0:
+            print("\n" * 40)
             python = sys.executable
             os.execl(python, python, * sys.argv)
-
-        # if self.duration == 500:
-        #     time.sleep(2)
 
 
 def main():
@@ -515,8 +513,8 @@ def main():
         bio_window = pyglet.window.Window(
             window_width, window_height, vsync=False)
     else:
-        screen_1 = display.get_screens()[0]
-        screen_2 = display.get_screens()[2]
+        screen_1 = display.get_screens()[2]
+        screen_2 = display.get_screens()[0]
 
         agent_window = pyglet.window.Window(
             fullscreen=True, screen=screen_1, vsync=False)
@@ -528,6 +526,7 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT)
         agent_window.clear()
         agent_batch.draw()
+
         if debug == True:
             fps_display.draw()
 
