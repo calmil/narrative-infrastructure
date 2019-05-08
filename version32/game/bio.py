@@ -5,14 +5,6 @@ from game import resources
 title_x = 30
 title_y = 30
 
-bio_x = 0
-bio_y = 40
-
-history_x = 300
-history_y = 300
-
-def create_text(text, window_width, window_height):
-    pass
 
 
 class Biography():
@@ -20,29 +12,43 @@ class Biography():
 
     def __init__(self, obj, batch, window_width, window_height, i):
 
-        box_width = 2 * (window_width / 3)
+        box_width = window_width-300
         box_height = window_height / 30
 
         self.obj = obj
         self.batch = batch
 
-        self.vertex_list = self.batch.add(8, pyglet.gl.GL_LINES, None,
-                ("v2f", (
-                        0, i*box_height, 
-                        box_width, i*box_height,
-                        box_width, i*box_height,
-                        box_width, i*box_height + box_height, 
-                        box_width, i*box_height + box_height, 
-                        0, i*box_height + box_height,
-                        0, i*box_height + box_height,
-                        0, 0, 
+        if i > 0:
+            self.vertex_list = self.batch.add(8, pyglet.gl.GL_LINES, None,
+                    ("v2f", (
+                            0, i*box_height, 
+                            box_width, i*box_height,
+                            box_width, i*box_height,
+                            box_width, i*box_height + box_height, 
+                            box_width, i*box_height + box_height, 
+                            0, i*box_height + box_height,
+                            0, i*box_height + box_height,
+                            0, 0, 
+                        )
                     )
-                )
+            )
+        else: 
+            self.vertex_list = self.batch.add(6, pyglet.gl.GL_LINES, None,
+                    ("v2f", (
+
+                            box_width, i*box_height,
+                            box_width, i*box_height + box_height, 
+                            box_width, i*box_height + box_height, 
+                            0, i*box_height + box_height,
+                            0, i*box_height + box_height,
+                            0, 0, 
+                        )
+                    )
             )
 
         self.title_tag = pyglet.text.Label(
-                str(obj.title),
-                font_name='Bangla MN',
+                str(obj.title.upper()),
+                font_name='Helvetica',
                 font_size=12,
                 color=(255, 255, 255, 255),
                 x=title_x,
@@ -59,16 +65,16 @@ class Biography():
                         obj.nature[2] + ', ' +
                         obj.nature[3] + ', ' +
                         obj.nature[4] + ', ' +
-                        obj.nature[5] + ', '
+                        obj.nature[5]
                     ),
                 multiline=True,
                 font_name='Helvetica',
-                font_size=12,
+                font_size=11,
                 color=(255, 255, 255, 255),
-                x=box_width - 30,
+                x=box_width - 10,
                 y=(i*box_height)+box_height/2,
                 width=600,
-                align='right',
+                align='left',
                 anchor_x='right', anchor_y='center',
                 batch=batch
             )

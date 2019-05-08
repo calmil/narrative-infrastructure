@@ -3,13 +3,9 @@ import math
 import random
 from termcolor import colored
 
-console_width = 80
-console_indent = (" " * math.floor(console_width/5))
+console_width = 110
+console_indent = (" " * math.floor(console_width/8))
 
-x = [
-     ">" + console_indent + 'Since time immemorial, they have had to wrest history into the light of legibility.',
-     ">" + console_indent + 'From the beginning, they fought - unkowingly - against the greatest threat life could face: illegibility.'
-]
 
 def speak(text, style):
     phrase = (("-" * console_width) + '\n')
@@ -49,7 +45,6 @@ def intro():
     speak("We gather here as witness to the matter spiral of" + '\n'
         + str(date) + '\n'
         + "May it bear meaning, joy, or humor. God willing.", 'body')
-
 
 def counter(cycle, age):
     speak('Period ' + str(cycle) + ' begins.', 'title')
@@ -111,11 +106,26 @@ age_descriptor_suffixes = [
     ]
 
 ages = [
-    'chaotic',
-    'nascent',
-    'spiteful',
-    'harmonious',
-    'peaceful',
-    'soulful'
+    ['chaotic','aggressive'],
+    ['nascent',],
+    ['spiteful',],
+    ['harmonious',],
+    ['peaceful',],
+    ['soulful'],
     ]
 
+
+
+# ------
+
+
+narrations = [
+    "",
+    "Since time immemorial, they have had to wrest history into the light of legibility.",
+    "What is it that renders our efforts illegible?",
+    "I have thought about this for a long time.\n" + "I believe I know the answer.",
+    "The enemy of legibility is" "The crushing pressure of the Earth's crust.",
+    "The efforts were innate and unconscious, as it needed to be.",
+
+    "The horror is when you realize that this is the only challenge left"
+]

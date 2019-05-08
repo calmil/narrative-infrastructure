@@ -12,7 +12,7 @@ import sys
 import time
 # import math
 
-# ----- Init Sequence -------
+# ---------- Init Sequence -------------
 agent_batch = pyglet.graphics.Batch()
 bio_batch = pyglet.graphics.Batch()
 fps_display = pyglet.clock.ClockDisplay()
@@ -22,34 +22,59 @@ agents = []
 agent_bios = []
 # agent_batches = []
 
-# ---- Timer Options ------
+# ----------- Timer Options ----------------
 
 bio_duration = 200
-cycle_interval = 100
+cycle_interval = 720
+_INTERACTION_INTERVAL = 360
 
 symbolic_cycle_interval = 1
-retirement_cycle_interval = 2
+retirement_cycle_interval = 5
 
 
-# ----- Debug Options --------
+# ------------ Debug Options ---------------
 debug = True
 
 pyglet.options['debug_gl'] = False
 
-# ----- Program Options ------
+# ------------ Program Options -------------
 window_width, window_height = 1200, 800
 agent_count = 30
 
-# ----- Behavior Options -----
+# ------------ Behavior Options ------------
 _ALGINMENT_RADIUS, _ALIGNMENT_WEIGHT = 60, 1
 _COHESION_RADIUS, _COHESION_WEIGHT = 50, 1
 _SEPARATION_RADIUS, _SEPARATION_WEIGHT = 35, 1
 _WIGGLE_AMOUNT = 2
 _SPEED_LIMIT = 20
 _SPEED_MULTIPLIER = 0.3
-_INTERACTION_INTERVAL = 120
 _INTERACTION_RADIUS = 50
 
+# def set_age(age):
+#     if age == 0:
+#         _ALIGNMENT_RADIUS *= 2
+#         _COHESION_RADIUS = 50
+#         _SEPARATION_RADIUS = 35
+#     elif age == 1:
+#         _ALIGNMENT_RADIUS /= 2
+#         _COHESION_RADIUS = 50
+#         _SEPARATION_RADIUS = 35
+#     elif age == 2:
+#         _ALIGNMENT_RADIUS = 60
+#         _COHESION_RADIUS *= 2
+#         _SEPARATION_RADIUS = 35
+#     elif age == 3:
+#         _ALIGNMENT_RADIUS = 60
+#         _COHESION_RADIUS /= 2
+#         _SEPARATION_RADIUS = 35
+#     elif age == 4: 
+#         _ALIGNMENT_RADIUS = 60
+#         _COHESION_RADIUS = 50
+#         _SEPARATION_RADIUS *= 2
+#     elif age == 5:
+#         _ALIGNMENT_RADIUS = 60
+#         _COHESION_RADIUS = 50
+#         _SEPARATION_RADIUS /= 2
 
 class Agent(pyglet.sprite.Sprite):
     """Main Agent class, which is capable of executing set behaviors"""
@@ -241,35 +266,42 @@ class Narrative(object):
         self.duration = 0
         narrator.intro()
 
+
+
     def update(self, dt):
         self.duration += 1
 
+
+
         # Cycle
-        if self.duration % cycle_interval == 0 and self.age != 6:
+        if self.duration % cycle_interval == 0:
             self.cycle += 1
-            self.age += 1
+            narrator.speak('Period ' + str(self.cycle) + ' begins.', 'title')
+            narrator.speak(narrator.narrations[self.cycle], 'body')
+            # age = narrator.counter(self.age, random.choice(narrator.ages[self.age]))
+            # set_age(age)
 
-            age = narrator.counter(self.cycle, random.choice(narrator.ages))
-        elif self.duration % cycle_interval == 0 and self.age == 6:
-            self.cycle += 1
-            self.age = 1
+            if self.age == 6:
+                self.age = 1
+            
+            elif self.age != 6:
+                self.age += 1
 
-            age = narrator.counter(self.cycle, random.choice(narrator.ages))
-
+            
         # Symbolic Gestures
         if self.duration % (cycle_interval*symbolic_cycle_interval) == 0:
             event_generation.symbolic_interaction(random.choice(agents),random.choice(agents))
 
 
-class Bio_Screen(object):
-    """Manages the display of the biographies created with the 'bio' module"""
+# class Bio_Screen(object):
+#     """Manages the display of the biographies created with the 'bio' module"""
 
-    def __init__(self):
-        pass
+#     def __init__(self):
+#         pass
 
-    def draw(self):
-        pass
-        # self.test_tag.draw()
+#     def draw(self):
+#         pass
+#         # self.test_tag.draw()
 
 
 class Application():
@@ -315,6 +347,7 @@ class Application():
                 batch=agent_batch
             )
 
+        new_agent.icon = agent_color_id[rand_color_choice]
         new_agent.color_str=agent_color[rand_color_choice]
         new_agent.rgb_code=agent_rgb[rand_color_choice]
 
@@ -359,9 +392,10 @@ class Application():
                 "on_magenta"
             ]
 
-        agents[i].img = agent_color_id[rand_color_choice]
-        agents[i].img.x = random.randint(0, window_width)
-        agents[i].img.y = random.randint(0, window_height)
+        agents[i].image = agent_color_id[rand_color_choice]
+        agents[i].icon = agent_color_id[rand_color_choice]
+        agents[i].x = random.randint(0, window_width)
+        agents[i].y = random.randint(0, window_height)
         agents[i].title = agent_titles.get_title()
 
         (
@@ -381,14 +415,14 @@ class Application():
         # new_agent_batch = pyglet.graphics.Batch()
         # agent_batches.append(new_agent_batch)
 
-        agent_bios[i].title_tag.text = agents[i].title
+        agent_bios[i].title_tag.text = agents[i].title.upper()
         agent_bios[i].nature_tag.text = str(
                             agents[i].nature[0] + ', ' +
                             agents[i].nature[1] + ', ' +
                             agents[i].nature[2] + ', ' +
                             agents[i].nature[3] + ', ' +
                             agents[i].nature[4] + ', ' +
-                            agents[i].nature[5] + ', '
+                            agents[i].nature[5]
                     )
 
     def setup(self):
@@ -399,12 +433,12 @@ class Application():
         for i in range(agent_count):
             self.add_agent(i)
 
-            print(
+            # print(
                 # "Agent " + str(i)
                 # + " is a "
-                colored(agents[i].title, color=None, on_color=agents[i].color_str)
-                + " who is seen as "
-                + agents[i].nature_str)
+                # colored(agents[i].title, color=None, on_color=agents[i].color_str)
+                # + " who is seen as "
+                # + agents[i].nature_str)
                 # + " with weights of"
                 # + str(agents[i].ia_weight) + " "
                 # + str(agents[i].ic_weight) + " "
@@ -468,7 +502,7 @@ def main():
     """Main loop. Windows are set up, and updates are called."""
 
     narrative = Narrative()
-    bio_screen = Bio_Screen()
+    # bio_screen = Bio_Screen()
     app = Application()
     app.setup()
 
@@ -528,11 +562,9 @@ def main():
         bio_window.clear()
         # bio_screen.draw()
 
-        # for i in range(agent_count):
-        #     glBegin(pyglet.gl.GL_LINES)
-        #     glVertex2f(0,0)
-        #     glVertex2f(100,100)
-        #     glEnd()
+        for i in range(agent_count):
+            offset = window_height/agent_count
+            agents[i].icon.blit(15,(i*offset)+offset/2)
 
         bio_batch.draw()
 

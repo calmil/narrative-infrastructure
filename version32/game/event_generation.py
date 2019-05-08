@@ -166,6 +166,10 @@ def physical_event(obj_1, obj_2):
 
         return phrase + '\n' + response_phrase
 
+    if random.choice([True, False, False, False, False]):
+        phrase += '\n'
+        phrase += random.choice(post_commentary)
+
     return phrase
 
 
@@ -194,6 +198,8 @@ def symbolic_interaction(obj_1, obj_2):
                 )
     else:
         phrase += map_string(obj_1, symbolic_interaction_nouns)
+
+    phrase += '.'
 
     print(phrase)
 
@@ -335,18 +341,14 @@ phrase_beginnings = [
     'random',
     [
         'To the surprise of many',
-        'Though it\'s difficult to see',
-        'Though it would later be forgotten',
         'As though it were inevitable',
         'Steeped in irony',
-        'From a certain perspective',
     ]
 ]
 
 adverbs = [
         'random',
         [
-            'abnormally',
             'absentmindedly',
             'accidentally',
             'actually',
@@ -366,7 +368,6 @@ adverbs = [
             'boldly',
             'bravely',
             'briefly',
-            'brightly',
             'briskly',
             'busily',
             'calmly',
@@ -419,10 +420,8 @@ adverbs = [
             'frightfully',
             'fully',
             'furiously',
-            'generally',
             'generously',
             'gently',
-            'gladly',
             'gleefully',
             'gracefully',
             'gratefully',
@@ -431,19 +430,14 @@ adverbs = [
             'hastily',
             'helpfully',
             'helplessly',
-            'highly',
             'honestly',
             'hopelessly',
-            'hourly',
             'hungrily',
             'immediately',
             'innocently',
             'inquisitively',
-            'instantly',
             'intensely',
             'intently',
-            'interestingly',
-            'inwardly',
             'irritably',
             'jaggedly',
             'jealously',
@@ -462,11 +456,8 @@ adverbs = [
             'knowledgeably',
             'lazily',
             'lightly',
-            'likely',
-            'limply',
             'loftily',
             'longingly',
-            'loosely',
             'loudly',
             'lovingly',
             'loyally',
@@ -506,7 +497,6 @@ adverbs = [
             'knowingly',
             'knowledgeably',
             'lazily',
-            'less',
             'lightly',
             'likely',
             'limply',
@@ -681,8 +671,6 @@ adverbs = [
             'warmly',
             'weakly',
             'wearily',
-            'wetly',
-            'wholly',
             'wildly',
             'willfully',
             'wisely',
@@ -700,6 +688,7 @@ adverbs = [
         ]
     ]
 
+
 physical_interaction_verbs = [
         'oc',
         [
@@ -712,6 +701,11 @@ physical_interaction_verbs = [
             'punches',
             'shoves',
             'tickles',
+            'wounds',
+            'bruises',
+            'itemizes the tresspasses of',
+            'grabs a ' + random.choice(objects) + ' from',
+            'grabs a ' + random.choice(objects) + ' from the hands of',
         ],
         [
             'signs toward',
@@ -720,8 +714,12 @@ physical_interaction_verbs = [
             'guides',
             'says something unintelligible to',
             'asks a favor of',
-            'sidles up to',
+            'shares a secret with',
+            'enjoys a small pleasure with',
+            'nods at',
+            'tries to strike up a conversation with',
             'feigns interest in',
+            'itemizes the tresspasses of',
         ],
         [
             'grows familiar with',
@@ -729,6 +727,8 @@ physical_interaction_verbs = [
             'compliments',
             'tries to entertain',
             'dances for',
+            'prepares a meal for',
+            'points out a ' + random.choice(objects) + ' to',
             'mumbles a blessing for',
             'fumbles for a complement for',
             'offers a small gift to',
@@ -736,7 +736,12 @@ physical_interaction_verbs = [
             'asks to dance with',
             'extends a hand toward',
             'kisses the hand of',
-            'offers a ' + random.choice(objects) + ' to'
+            'offers a ' + random.choice(objects) + ' to',
+            'shares a dream with',
+            'offers a picture of a ' + random.choice(objects) + ' to',
+            'mentions the ' + random.choice(objects) + ' to',
+            'tries to reminisce with',
+            'expresses a fondness for',
         ]
     ]
 
@@ -896,3 +901,21 @@ response_thoughts = [
         ]
     ]
 
+# ------------- Commentary --------------------
+
+post_commentary = [
+        "It is an accident.",
+        "It would not have happened any other way.",
+        "It is a generous act, in the grand scheme of things.",
+        "All things considered, it is a miracle.",
+        "It is not news to anyone.",
+        "It is electryifying to see.",
+        "It is meant to be a gesture of care.",
+        "It is intended as a kindness.",
+        "And then...",
+        "But...",
+        "And the cast continues...",
+        "A new movement begins.",
+        "The pattern seems more complete.",
+        "It is important to remember this."
+    ]
