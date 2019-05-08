@@ -121,7 +121,12 @@ def summary(agents):
 
 narrations = [
     "",
+    "[The stage is unlit, but you can discern bodies moving and talking in the darkness.]",
+    "[A spotlight shines on a lone figure, unmoving, centered at the back of the stage.]",
+    "[They speak.]",
     "Since time immemorial, we have had to wrest history into the light of legibility.",
+    "It is through the our interpretation of the countless moving, speaking figures that surround us" + "\n"
+        + "that we participate in this most divine of rituals.",
     "What is it that renders our efforts illegible?",
     "I have thought about this for a long time.\n" + "I will venture a few humble theories.",
     "The force of illegibility is found in\n" + "the crushing pressure of the Earth's crust.",
@@ -152,7 +157,7 @@ narrations = [
     "When ugliness is understood as truthful, it does not disappear," + "\n"
         + "but transcends into a sympathetic component of grace.",
 
-    "The horror arrives when you realize that the clarification of true ugliness" + "\n"
+    "It may seem horrifying, but I wager that the clarification of true ugliness" + "\n"
         + "is the only intellectual pursuit we have left.",
 
     "The horror will pass.",
@@ -161,6 +166,12 @@ narrations = [
 
     "The work wil be innate and unconscious, as it needs to be...",
     "...as it needed to be...",
-    "...as it was..."
+    "...as it was...",
+    
+    "",
+
+    "",
+
+    ""
 
 ]
