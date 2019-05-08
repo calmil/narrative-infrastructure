@@ -14,7 +14,7 @@ import time
 
 # ----- Init Sequence -------
 agent_batch = pyglet.graphics.Batch()
-narrative_batch = pyglet.graphics.Batch()
+bio_batch = pyglet.graphics.Batch()
 fps_display = pyglet.clock.ClockDisplay()
 
 agent_index = []
@@ -25,7 +25,7 @@ agent_batches = []
 # ---- Timer Options ------
 
 bio_duration = 200
-cycle_interval = 360
+cycle_interval = 100
 
 symbolic_cycle_interval = 1
 retirement_cycle_interval = 10
@@ -37,8 +37,8 @@ debug = True
 pyglet.options['debug_gl'] = False
 
 # ----- Program Options ------
-window_width, window_height = 1000, 600
-agent_count = 20
+window_width, window_height = 1200, 800
+agent_count = 30
 
 # ----- Behavior Options -----
 _ALGINMENT_RADIUS, _ALIGNMENT_WEIGHT = 60, 1
@@ -117,7 +117,7 @@ class Agent(pyglet.sprite.Sprite):
                                                    self.x + self.v.x,
                                                    self.y + self.v.y]))
 
-        self.history = []
+        # self.history = []
 
     def update(self, dt):
 
@@ -132,8 +132,8 @@ class Agent(pyglet.sprite.Sprite):
 
         # Calculate wiggle.
         self.random_offset = vector2.Vector2(
-                random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2),
-                random.randint(_WIGGLE_AMOUNT / 2 * -1, _WIGGLE_AMOUNT / 2)
+                random.randint(((_WIGGLE_AMOUNT / 2) ) * -1, (_WIGGLE_AMOUNT / 2) ),
+                random.randint(((_WIGGLE_AMOUNT / 2) ) * -1, (_WIGGLE_AMOUNT / 2) )
                 )
         self.v += self.random_offset
 
@@ -237,16 +237,26 @@ class Narrative(object):
 
     def __init__(self):
         self.cycle = 0
+        self.age = 0
         self.duration = 0
         narrator.intro()
 
     def update(self, dt):
         self.duration += 1
 
-        # Counter
-        if self.duration % cycle_interval == 0:
+        # Cycle
+        if self.duration % cycle_interval == 0 and self.age != 6:
             self.cycle += 1
-            narrator.counter(self.cycle)
+            self.age += 1
+
+            age = narrator.counter(self.cycle, random.choice(narrator.ages))
+
+        elif self.duration % cycle_interval == 0 and self.age == 6:
+            self.cycle += 1
+            self.age = 1
+
+            age = narrator.counter(self.cycle, random.choice(narrator.ages))
+
 
         # Symbolic Gestures
         if self.duration % (cycle_interval*symbolic_cycle_interval) == 0:
@@ -327,7 +337,7 @@ class Application():
         new_agent_batch = pyglet.graphics.Batch()
         agent_batches.append(new_agent_batch)
 
-        new_agent_bio = bio.Biography(new_agent, new_agent_batch, window_width, window_height)
+        new_agent_bio = bio.Biography(new_agent, bio_batch, window_width, window_height, i)
         agent_bios.append(new_agent_bio)
 
     def setup(self):
@@ -378,7 +388,7 @@ class Application():
                 obj_1.interacts_with(obj_2)
                 obj_2.interacts_with(obj_1)
 
-            agent_bios[i].update(dt)            
+            # agent_bios[i].update(dt)            
 
         self.duration += 1
         if self.duration % bio_duration == 0 and self.bio_index != (agent_count-1):
@@ -398,9 +408,6 @@ class Application():
 
         # if self.duration == 500:
         #     time.sleep(2)
-
-        
-
 
 
 def main():
@@ -457,7 +464,7 @@ def main():
                                 )
 
                         # ADD HISTORY
-                        agent_bios[obj_1.id].update_history(obj_1.history)
+                        # agent_bios[obj_1.id].update_history(obj_1.history)
 
         for agent in agents:     
             glColor3f(agent.rgb_code[0], agent.rgb_code[1], agent.rgb_code[2])
@@ -467,9 +474,15 @@ def main():
     def on_draw():
         glClear(GL_COLOR_BUFFER_BIT)
         bio_window.clear()
-        bio_screen.draw()
+        # bio_screen.draw()
 
-        agent_bios[app.bio_index].draw()
+        # for i in range(agent_count):
+        #     glBegin(pyglet.gl.GL_LINES)
+        #     glVertex2f(0,0)
+        #     glVertex2f(100,100)
+        #     glEnd()
+
+        bio_batch.draw()
 
     pyglet.clock.schedule_interval(app.update, 1 / 60.0)
     pyglet.clock.schedule_interval(narrative.update, 1 / 60.0)
