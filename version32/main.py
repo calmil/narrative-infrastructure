@@ -33,7 +33,7 @@ retirement_cycle_interval = 5
 
 
 # ------------ Debug Options ---------------
-debug = True
+debug = False
 
 pyglet.options['debug_gl'] = False
 
