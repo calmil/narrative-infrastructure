@@ -12,7 +12,7 @@ class Biography():
 
     def __init__(self, obj, batch, window_width, window_height, i):
 
-        box_width = window_width-300
+        box_width = window_width
         box_height = window_height / 30
 
         self.obj = obj

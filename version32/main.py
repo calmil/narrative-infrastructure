@@ -38,7 +38,7 @@ debug = False
 pyglet.options['debug_gl'] = False
 
 # ------------ Program Options -------------
-window_width, window_height = 800, 1200
+window_width, window_height = 1024, 1280
 agent_count = 30
 
 # ------------ Behavior Options ------------
