@@ -16,6 +16,7 @@ import time
 agent_batch = pyglet.graphics.Batch()
 bio_batch = pyglet.graphics.Batch()
 fps_display = pyglet.clock.ClockDisplay()
+colorama.init()
 
 agent_index = []
 agents = []
@@ -28,8 +29,10 @@ bio_duration = 200
 cycle_interval = 720
 _INTERACTION_INTERVAL = 360
 
+
 symbolic_cycle_interval = 1
 retirement_cycle_interval = 5
+system_restart_interval = 100
 
 
 # ------------ Debug Options ---------------
@@ -490,9 +493,9 @@ class Application():
 
         # ------------ System Restart ------------------
         if debug == False:
-            if self.duration == 1000:
-                    python = sys.executable
-                    os.execl(python, python, * sys.argv)
+            if self.duration & (cycle_interval*system_restart_interval) == 0:
+                python = sys.executable
+                os.execl(python, python, * sys.argv)
 
         # if self.duration == 500:
         #     time.sleep(2)
@@ -527,7 +530,8 @@ def main():
         glClear(GL_COLOR_BUFFER_BIT)
         agent_window.clear()
         agent_batch.draw()
-        fps_display.draw()
+        if debug == True:
+            fps_display.draw()
 
         for i in range(len(agents)):
             for j in range(i + 1, len(agents)):
