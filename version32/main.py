@@ -38,7 +38,7 @@ debug = False
 pyglet.options['debug_gl'] = False
 
 # ------------ Program Options -------------
-window_width, window_height = 1200, 800
+window_width, window_height = 800, 1200
 agent_count = 30
 
 # ------------ Behavior Options ------------
@@ -515,7 +515,7 @@ def main():
             window_width, window_height, vsync=False)
     else:
         screen_1 = display.get_screens()[0]
-        screen_2 = display.get_screens()[1]
+        screen_2 = display.get_screens()[2]
 
         agent_window = pyglet.window.Window(
             fullscreen=True, screen=screen_1, vsync=False)
