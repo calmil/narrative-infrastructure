@@ -493,7 +493,7 @@ class Application():
 
         # ------------ System Restart ------------------
         if debug == False:
-            if self.duration & (cycle_interval*system_restart_interval) == 0:
+            if self.duration % (cycle_interval*system_restart_interval) == 0:
                 python = sys.executable
                 os.execl(python, python, * sys.argv)
 
