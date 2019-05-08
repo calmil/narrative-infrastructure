@@ -10,48 +10,6 @@ from termcolor import colored
 # Outer Separation: Incentive to be repelled
 
 
-def map_string(obj_1, nature, obj_2, target_nature):
-
-    if nature == 'ia':
-        affecting_quality = obj_1.ia_weight
-    elif nature == 'oa':
-        affecting_quality = obj_1.oa_weight
-    elif nature == 'ic':
-        affecting_quality = obj_1.ic_weight
-    elif nature == 'oc':
-        affecting_quality = obj_1.oc_weight
-    elif nature == 'is':
-        affecting_quality = obj_1.is_weight
-    elif nature == 'os':
-        affecting_quality = obj_1.os_weight
-
-    if target_nature == 'ia':
-        target_quality = obj_2.ia_weight
-        # Change the corr. bio string:
-    elif target_nature == 'oa':
-        target_quality = obj_2.oa_weight
-    elif target_nature == 'ic':
-        target_quality = obj_2.ic_weight
-    elif target_nature == 'oc':
-        target_quality = obj_2.oc_weight
-    elif target_nature == 'is':
-        target_quality = obj_2.is_weight
-    elif target_nature == 'os':
-        target_quality = obj_2.os_weight
-
-    if affecting_quality >= 0 and affecting_quality <= 0.6:
-        mod = (-0.1)
-    elif affecting_quality >= 0.7 and affecting_quality <= 1.3:
-        mod = 0
-    elif affecting_quality >= 1.4:
-        mod = 0.1
-
-    if target_quality != 0.0 and mod == (-0.1):
-        target_quality += mod
-    if target_quality != 2.0 and mod == (0.1):
-        target_quality += mod
-
-
 def round_nearest(x, a):
     return round(round(x / a) * a, -int(math.floor(math.log10(a))))
 
@@ -123,7 +81,6 @@ def physical_event(obj_1, obj_2):
 
     phrase += '.'
 
-
     # ------------ Response Phrase ------------
     if random.choice([True, False, False]):
         response_phrase = ""
@@ -162,11 +119,11 @@ def physical_event(obj_1, obj_2):
             response_phrase += obj_1_tag + '.'
 
         else:
-            response_phrase += ' ' + map_string(obj_2, response_thoughts) +'.'
+            response_phrase += ' ' + map_string(obj_2, response_thoughts) + '.'
 
         return phrase + '\n' + response_phrase
 
-    if random.choice([True, False, False, False, False]):
+    if random.choice([True, False, False, False]):
         phrase += '\n'
         phrase += random.choice(post_commentary)
 
@@ -920,5 +877,13 @@ post_commentary = [
         "A new movement begins.",
         "The pattern seems more complete.",
         "It is important to remember this.",
-        "There is a brief moment of struggle, before the connection is made."
+        "There is a brief moment of struggle, before the connection is made.",
+        "They are interlinked.",
+        "It is commemorated on a " + random.choice(objects),
+        "It is miraculous.",
+        "[The audience cheers.]",
+        "[The audience demands more.]",
+        "No explanation is given.",
+        "The others avert their gaze.",
+
     ]

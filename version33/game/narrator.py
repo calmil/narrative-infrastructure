@@ -11,9 +11,12 @@ def speak(text, style):
     phrase = (("-" * console_width) + '\n')
 
     if style == 'title':
-        bold_text = colored(text, color=None, on_color=None, attrs=['bold']) 
+        bold_text = colored(text, color=None, on_color=None, attrs=['bold'])
         left_margin = '>' + (' ' * math.floor((console_width - len(text))/2))
-        right_margin = (' ' * (console_width - len(bold_text) - len(left_margin)) + (' ' * 7) + '<')
+        right_margin = (' ' * (
+                console_width - len(bold_text) - len(left_margin)
+            ) + (' ' * 7) + '<')
+
         phrase += (
             left_margin
             + bold_text
@@ -25,18 +28,19 @@ def speak(text, style):
 
         for i in range(len(split_text)):
             right_margin = ((' ' * (console_width - len(split_text[i]) - len(console_indent) - 2)) + '<')
-            
+
             phrase += (
-                '>' 
-                + console_indent 
+                '>'
+                + console_indent
                 + split_text[i]
                 + right_margin
                 + '\n'
             )
-    
+
     phrase += ("-" * console_width)
 
     print(phrase)
+
 
 def intro():
     '''Commemorate the beginning of a Spiral'''
@@ -45,6 +49,7 @@ def intro():
     speak("We gather here as witness to the matter spiral of" + '\n'
         + str(date) + '\n'
         + "May it bear meaning, joy, or humor. God willing.", 'body')
+
 
 def counter(cycle, age):
     speak('Period ' + str(cycle) + ' begins.', 'title')
@@ -76,10 +81,10 @@ def summary(agents):
 # A low: People less likely to align to others, disagreeability incoherent zeitgeist
 
 # C high: People all more likely to cohere to one another? Closer proximity, not agreeability? Working together
-# C low: People less drawn to one another. Dishonesty? 
+# C low: People less drawn to one another. Dishonesty?
 
-# S high: Tumultuous, scattered, narcissicm? 
-# S low: People 
+# S high: Tumultuous, scattered, narcissicm?
+# S low: People
 
 # age_descriptors = [
 #     'The mood is',
@@ -138,8 +143,7 @@ narrations = [
 
     "The desire to articulate is a divine one.",
     "To articulate, to speak, even to simply produce a sound is a miracle.",
-    "It is the most sacred defense against the crushing threat"
-        +"\n" 
+    "It is the most sacred defense against the crushing threat" + "\n"
         + "of time,\n"
         + "of entropy,\n"
         + "and of death.",
@@ -151,7 +155,7 @@ narrations = [
 
     "While there is great esteem in fighting illegibility,"
         + "\n"
-        + "it is dangerous, ugly work.",
+        + "it is dangerous, dirty work.",
     "Articulation risks showing life how ugly it can be.",
     "To render the world more legible risks bringing the hideous to light.",
     "When ugliness is understood as truthful, it does not disappear," + "\n"
@@ -167,7 +171,7 @@ narrations = [
     "The work wil be innate and unconscious, as it needs to be...",
     "...as it needed to be...",
     "...as it was...",
-    
+
     "",
 
     "",
