@@ -35,7 +35,7 @@ system_restart_interval = len(narrator.narrations)-1
 bio_duration = 200
 
 # ------------ Debug Options ---------------
-debug = True
+debug = False
 
 pyglet.options['debug_gl'] = False
 
