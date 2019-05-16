@@ -460,7 +460,7 @@ def main():
         bio_window = pyglet.window.Window(
             window_width, window_height, vsync=False)
     else:
-        screen_1 = display.get_screens()[2]
+        screen_1 = display.get_screens()[1]
         screen_2 = display.get_screens()[0]
 
         agent_window = pyglet.window.Window(
