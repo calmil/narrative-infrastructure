@@ -182,10 +182,10 @@ narrations = [
     "    I have thought about this for a long time.\n" + "    I will venture a few humble theories.",
     "    The force of illegibility is found in\n" + "    the crushing pressure of the Earth's crust.",
     "    The force of illegibility is found in\n" + "    the flattening rot that takes hold of dead, buried matter.",
-    "    The force of illegibility is found in\n" + "    the geological calculations of the turbulent forces below.",
-    "    It works its way from the earth, into the bodies of vital agents,",
+    "    The force of illegibility is found in\n" + "    infrastructure that metaphors away meaning into fog.",
+    "    It works its way from the earth, into material,",
     "    waiting patiently...",
-    "    It reclaims all that emerges, back into the inscrutable wastes of the abyss.",
+    "    ...before it reclaims all that emerges, back into the inscrutable wastes of the abyss.",
 
     "    The desire to articulate is a divine one.",
     "    To articulate, to speak, even to simply produce a sound is a miracle.",

@@ -855,7 +855,7 @@ response_thoughts = [
             'curses',
             'privately rages',
             'loses faith',
-            'cannot stand it222222'
+            'cannot stand it'
         ]
     ]
 
