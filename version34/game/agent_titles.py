@@ -3,6 +3,7 @@ import random
 
 
 titles = [
+    'chief',
     'king',
     'earl',
     'queen',

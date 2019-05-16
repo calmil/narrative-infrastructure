@@ -104,28 +104,17 @@ def physical_event(obj_1, obj_2):
 
         response_phrase += obj_2_tag
 
-        if random.choice([True, False]):
-            if random.choice([True, False]):
-                response_phrase += ' ' + map_string(
-                        obj_2, 
-                        physical_response_natures
-                    )
-            
-            response_phrase += (
-                ' ' + map_string(obj_2, response_actions) +
-                ' ' + map_string(obj_2, response_directions) + ' the '
-                )
-
-            response_phrase += obj_1_tag + '.'
-
-        else:
-            response_phrase += ' ' + map_string(obj_2, response_thoughts) + '.'
+        response_phrase += ' ' + map_string(obj_2, response_thoughts) + '.'
 
         return phrase + '\n' + response_phrase
 
     if random.choice([True, False, False, False]):
         phrase += '\n'
         phrase += " " + random.choice(post_commentary)
+
+    if random.choice([True, False, False, False, False, False, False]):
+        phrase += '\n'
+        phrase += " " + random.choice(environment_descriptions)
 
     return phrase
 
@@ -185,11 +174,9 @@ objects = [
         'foreign trinket',
         'child\'s blanket',
         'torn blanket',
-        'old blanket',
-        'ripped quilt',
+        'fragment of a ripped quilt',
         'broken bowl',
         'blanket',
-        'ill-fitting suit and tie',
         'fragile mask',
         'profane mask',
         'innapropriate mask',
@@ -201,6 +188,17 @@ objects = [
         'small atlas',
         'wooden figurine',
         'wet mop',
+        'childish drawing',
+        'pocket dictionary',
+        'old blanket',
+        'poorly-folded map',
+        'road atlas',
+        'legal document',
+        'crude figurine',
+        'dirty cartoon',
+        'journal',
+        'crumpled map',
+        'rough wallet'
     ]
 
 # ----------- Symbolic Interaction ------------
@@ -251,7 +249,7 @@ symbolic_interaction_subjects = [
         'random',
         [
             'the idea',
-            'the memory',
+            'a memory',
             'the history',
             'what they remember',
             'a distant memory',
@@ -500,6 +498,7 @@ adverbs = [
             'politely',
             'poorly',
             'positively',
+            'potentially',
             'powerfully',
             'promptly',
             'properly',
@@ -516,7 +515,6 @@ adverbs = [
             'readily',
             'reassuringly',
             'recklessly',
-            'regularly',
             'reluctantly',
             'repeatedly',
             'reproachfully',
@@ -774,41 +772,13 @@ physical_response_natures = [
             'immediately',
             'privately',
             'deliberately',
-            ', with ease,',
+            'gracefully',
+            'gratefully',
+            'thoughtlessly',
+            'maturely',
             'automatically',
             'simply',
             'plainly',
-        ]
-    ]
-
-response_actions = [
-        'is',
-        [
-            'rolls over',
-            'smiles',
-            'laughs',
-            'extends a hand',
-            'gives thanks'
-        ],
-        [
-            'exhales',
-            'glances',
-            'stares',
-            'disregards',
-            'nods',
-            'breathes heavily',
-        ],
-        [
-            'howls',
-            'screams',
-            'hollers',
-            'glares',
-            'rages',
-            'stomps',
-            'audibly complains',
-            'lurches',
-            'stares aggressively',
-            'flares their nostrils',
         ]
     ]
 
@@ -819,14 +789,37 @@ response_directions = [
             'at',
             'toward',
             'towards',
-            'in response to',
-            'due to the actions of',
-            'as recourse for the actions of',
-            'in the direction of',
             'directly at',
             'straight back at',
-            'near',
-            'in the general vicinity of',
+        ]
+    ]
+
+response_actions = [
+        'is',
+        [
+            'rolls over',
+            'smiles',
+            'laughs', 
+            'extends a hand',
+            'gives thanks'
+        ],
+        [
+            'disregards',
+            'nods',
+            'ignores'
+        ],
+        [
+            'howls' + random.choice(response_directions[1]),
+            'screams',
+            'hollers',
+            'glares' + random.choice(response_directions[1]),
+            'rages',
+            'stomps',
+            'audibly complains',
+            'lurches' + random.choice(response_directions[1]),
+            'lunges' + random.choice(response_directions[1]),
+            'stares aggressively',
+            'flares their nostrils',
         ]
     ]
 
@@ -855,7 +848,7 @@ response_thoughts = [
             'curses',
             'privately rages',
             'loses faith',
-            'cannot stand it222222'
+            'cannot stand it'
         ]
     ]
 
@@ -888,8 +881,25 @@ post_commentary = [
         "[expressions of disgust sweep across an unseen crowd]",
         "[a crowd cheers]",
         "[a crowd demands more]",
-        "[a bird chirps]",
-        "[a baby begins to cry]",
         "[laughter]"
 
+    ]
+
+environment_descriptions = [ 
+        "[a bird chirps]",
+        "[a baby begins to cry]",
+        "[the faint sounds of a freeway]",
+        "[tar gurgles up from the earth]",
+        "[the wind knocks a dead branch loose]",
+        "[a small choir begins to form]",
+        "[an unseen agent scribbles a note]",
+        "[a cough]",
+        "[nearby, but unseen, a whisper]",
+        "[muffled shouting]",
+        "[distant construction sounds]",
+        "[a dog barks]",
+        "[a glass shatters]",
+        "[the wind picks up]",
+        "[the hot air begins to shimmer]",
+        
     ]

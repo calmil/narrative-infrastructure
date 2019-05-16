@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 
 from game import bio, resources, vector2, util, agent_natures, agent_titles, event_generation, narrator
-# from collections import deque
-from termcolor import colored
 from pyglet.gl import *
 import colorama
 import pyglet
 import random
 import os
 import sys
-# import time
-# import math
+
 
 # ---------- Init Sequence -------------
 agent_batch = pyglet.graphics.Batch()
@@ -40,7 +37,7 @@ debug = True
 pyglet.options['debug_gl'] = False
 
 # ------------ Program Options -------------
-window_width, window_height = 1080, 1920
+window_width, window_height = 1024, 1280
 agent_count = 30
 
 # ------------ Behavior Options ------------
@@ -251,10 +248,8 @@ class Narrative(object):
         self.duration += 1
 
         if self.duration % cycle_interval == 0:
-            random_agent = random.choice(agents)
             self.cycle += 1
-            # narrator.speak('Period ' + str(self.cycle) + ' begins.', 'title')
-            narrator.speak(narrator.narrations[self.cycle], 'body')
+            narrator.speak(str(self.cycle), random.choice(agents), )
 
             if self.age == 6:
                 self.age = 1
