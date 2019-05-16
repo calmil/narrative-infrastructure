@@ -14,7 +14,7 @@ def vowel_check(string):
 
 
 def speak(text, style):
-    phrase = (("-" * console_width) + '\n')
+    phrase = '\n' + (("-" * console_width) + '\n')
 
     if style == 'title':
         bold_text = colored(text, color=None, on_color=None, attrs=['bold'])
@@ -175,7 +175,7 @@ def counter(cycle, age):
 narrations = [
     "",
     "    Since time immemorial, we have had to wrest history into the light of legibility.",
-    "    It is through the our interpretation of the countless moving, speaking figures that surround us" + "\n"
+    "    It is through interpretation of the countless moving, speaking figures that surround us" + "\n"
         + "    that we participate in this most divine of rituals.",
     
     "    What is it that renders our efforts illegible?",
