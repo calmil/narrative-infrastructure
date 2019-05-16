@@ -105,20 +105,20 @@ def physical_event(obj_1, obj_2):
         response_phrase += obj_2_tag
 
         if random.choice([True, False]):
-            if random.choice([True, False]):
-                response_phrase += ' ' + map_string(
-                        obj_2, 
-                        physical_response_natures
-                    )
+        #     if random.choice([True, False]):
+        #         response_phrase += ' ' + map_string(
+        #                 obj_2, 
+        #                 physical_response_natures
+        #             )
             
-            response_phrase += (
-                ' ' + map_string(obj_2, response_actions) +
-                ' ' + map_string(obj_2, response_directions) + ' the '
-                )
+        #     response_phrase += (
+        #         ' ' + map_string(obj_2, response_actions) +
+        #         ' ' + map_string(obj_2, response_directions) + ' the '
+        #         )
 
-            response_phrase += obj_1_tag + '.'
+        #     response_phrase += obj_1_tag + '.'
 
-        else:
+        # else:
             response_phrase += ' ' + map_string(obj_2, response_thoughts) + '.'
 
         return phrase + '\n' + response_phrase
