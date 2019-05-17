@@ -439,7 +439,7 @@ class Application():
 
         # ------------ System Restart ------------------
         if self.duration % (cycle_interval*system_restart_interval) == 0:
-            print("\n" * 40)
+            print("\n" * 200)
             python = sys.executable
             os.execl(python, python, * sys.argv)
 

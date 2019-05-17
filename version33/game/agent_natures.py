@@ -148,4 +148,4 @@ def get_nature():
            )
 
 
-print(get_nature())
+# print(get_nature())
