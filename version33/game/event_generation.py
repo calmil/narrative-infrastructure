@@ -784,7 +784,7 @@ response_actions = [
             'stares',
             'disregards',
             'nods',
-            'breathes heavily',
+            'breathes heavily'
         ],
         [
             'howls',
@@ -796,7 +796,7 @@ response_actions = [
             'audibly complains',
             'lurches',
             'stares aggressively',
-            'flares their nostrils',
+            'flares their nostrils'
         ]
     ]
 
